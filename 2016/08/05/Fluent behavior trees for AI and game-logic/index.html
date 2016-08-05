@@ -38,7 +38,7 @@
 				<h1 class="site-name"><a href="/" title="Sheldon的世界">Sheldon的世界</a></h1>
 				<h2 class="blog-motto">Keep Calm and Carry On</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -51,7 +51,7 @@
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yoursite.com">
 					</form>
 					
@@ -75,7 +75,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-08-05T20:37:06.269Z" itemprop="datePublished">2016-08-05</time>
-    更新日期:<time datetime="2016-08-05T20:41:19.999Z" itemprop="dateModified">2016-08-05</time>
+    Updated:<time datetime="2016-08-05T20:45:02.121Z" itemprop="dateModified">2016-08-05</time>
     
   </p>
 </header>
@@ -83,8 +83,8 @@
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">2.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取代码"><span class="toc-number">3.</span> <span class="toc-text">获取代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理论"><span class="toc-number">4.</span> <span class="toc-text">理论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#行为树"><span class="toc-number">4.1.</span> <span class="toc-text">行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#流式API对比传统API"><span class="toc-number">4.2.</span> <span class="toc-text">流式API对比传统API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise对比行为树"><span class="toc-number">4.3.</span> <span class="toc-text">Promise对比行为树</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实践"><span class="toc-number">5.</span> <span class="toc-text">实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#行为树状态"><span class="toc-number">5.1.</span> <span class="toc-text">行为树状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本用法"><span class="toc-number">5.2.</span> <span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#节点名"><span class="toc-number">5.3.</span> <span class="toc-text">节点名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#节点类型"><span class="toc-number">5.4.</span> <span class="toc-text">节点类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#行为-叶子节点，Action-Leaf"><span class="toc-number">5.4.1.</span> <span class="toc-text">行为/叶子节点，Action/Leaf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#串行节点"><span class="toc-number">5.4.2.</span> <span class="toc-text">串行节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#并行节点"><span class="toc-number">5.4.3.</span> <span class="toc-text">并行节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#选择节点"><span class="toc-number">5.4.4.</span> <span class="toc-text">选择节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#条件节点"><span class="toc-number">5.4.5.</span> <span class="toc-text">条件节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#反转节点"><span class="toc-number">5.4.6.</span> <span class="toc-text">反转节点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#嵌套行为树"><span class="toc-number">5.5.</span> <span class="toc-text">嵌套行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#行为复用"><span class="toc-number">5.6.</span> <span class="toc-text">行为复用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-行为树"><span class="toc-number">5.7.</span> <span class="toc-text">Promise + 行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#真实例子"><span class="toc-number">5.8.</span> <span class="toc-text">真实例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">6.</span> <span class="toc-text">结论</span></a></li></ol>
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取代码"><span class="toc-number">2.</span> <span class="toc-text">获取代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理论"><span class="toc-number">3.</span> <span class="toc-text">理论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#行为树"><span class="toc-number">3.1.</span> <span class="toc-text">行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#流式API对比传统API"><span class="toc-number">3.2.</span> <span class="toc-text">流式API对比传统API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise对比行为树"><span class="toc-number">3.3.</span> <span class="toc-text">Promise对比行为树</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实践"><span class="toc-number">4.</span> <span class="toc-text">实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#行为树状态"><span class="toc-number">4.1.</span> <span class="toc-text">行为树状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本用法"><span class="toc-number">4.2.</span> <span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#节点名"><span class="toc-number">4.3.</span> <span class="toc-text">节点名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#节点类型"><span class="toc-number">4.4.</span> <span class="toc-text">节点类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#行为-叶子节点，Action-Leaf"><span class="toc-number">4.4.1.</span> <span class="toc-text">行为/叶子节点，Action/Leaf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#串行节点"><span class="toc-number">4.4.2.</span> <span class="toc-text">串行节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#并行节点"><span class="toc-number">4.4.3.</span> <span class="toc-text">并行节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#选择节点"><span class="toc-number">4.4.4.</span> <span class="toc-text">选择节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#条件节点"><span class="toc-number">4.4.5.</span> <span class="toc-text">条件节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#反转节点"><span class="toc-number">4.4.6.</span> <span class="toc-text">反转节点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#嵌套行为树"><span class="toc-number">4.5.</span> <span class="toc-text">嵌套行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#行为复用"><span class="toc-number">4.6.</span> <span class="toc-text">行为复用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-行为树"><span class="toc-number">4.7.</span> <span class="toc-text">Promise + 行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#真实例子"><span class="toc-number">4.8.</span> <span class="toc-text">真实例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">5.</span> <span class="toc-text">结论</span></a></li></ol>
 		</div>
 		
 		<p>本文翻译自<a href="http://www.what-could-possibly-go-wrong.com/fluent-behavior-trees-for-ai-and-game-logic/" target="_blank" rel="external">Fluent behavior trees for AI and game-logic</a>，by <a href="http://www.what-could-possibly-go-wrong.com/author/ash/" target="_blank" rel="external">Ashley Davis</a></p>
@@ -92,7 +92,6 @@
 <p>这么多年来，我一直对行为树抱有兴趣。它是行之有效的创建AI和游戏逻辑的方式。许多专业公司的游戏AI策划用行为树编辑器创建行为。</p>
 <p>独立开发者（或说受资金限制的专业开发者）可能不能负担购买或造一个好的行为树编辑器。多数情况下，游戏开发者必须三头六臂，开发中扮演不同的角色。如果这和你的情境相似，你可能不是有太多的的工具任君使用的专业游戏策划。</p>
 <p>本文是技术文档，并提供开源库。我将同时提供一些理论及实践样例。另外我将对比传统的行为树和其他技术</p>
-<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>[TOC]</p>
 <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><a href="https://en.wikipedia.org/wiki/Behavior_tree_(artificial_intelligence,_robotics_and_control" target="_blank" rel="external">行为树</a>)已经出现在我们视野中有十来年之久了。感谢2005年GDC在<a href="http://www.gamasutra.com/view/feature/130663/gdc_2005_proceeding_handling_.php" target="_blank" rel="external">光环2的AI</a>的分享中，将其引入了游戏产业。自此它在多方媒体包括影响深远的<a href="http://aigamedev.com/" target="_blank" rel="external">AiGameDev.com</a>中备受欢迎。</p>
 <p>本文陈述的技术同时联合了<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank" rel="external">流式API</a>和强大的行为树。现在已是可用的<a href="https://github.com/codecapers/Fluent-Behaviour-Tree" target="_blank" rel="external">开源C#库</a>了。我个人曾在Unity商业游戏<a href="http://www.codecapers.com.au/portfolio/driving-simulator/" target="_blank" rel="external">driving simulator project</a>中使用该技术和类库。该库是常规的C#代码，不限于在Unity中使用。例如你可以轻松应用于<a href="https://en.wikipedia.org/wiki/MonoGame" target="_blank" rel="external">MonoGame</a>中。一个相似的库可运行与C++中，任何人可自由移植到其他语言。</p>
 <p>本文面向那些寻求廉价但能丰富健壮构建AI方式的游戏开发者。廉价指的是你不需要造一个编辑器，也不需要聘用游戏策划使用它。这机制适用于常扮演开发、美术、策划等的独立游戏开发者。</p>
@@ -191,9 +190,9 @@
  
 
 <div class="next">
-<a href="/2016/08/05/Using promises for Unity async operations/"  title="promise应用于Unity异步操作">
+<a href="/2016/08/05/Promises for Game Development/"  title="使用Promise进行游戏开发">
  <strong>NEXT:</strong><br/> 
- <span>promise应用于Unity异步操作
+ <span>使用Promise进行游戏开发
 </span>
 </a>
 </div>
@@ -202,20 +201,20 @@
 
 	
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">2.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取代码"><span class="toc-number">3.</span> <span class="toc-text">获取代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理论"><span class="toc-number">4.</span> <span class="toc-text">理论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#行为树"><span class="toc-number">4.1.</span> <span class="toc-text">行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#流式API对比传统API"><span class="toc-number">4.2.</span> <span class="toc-text">流式API对比传统API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise对比行为树"><span class="toc-number">4.3.</span> <span class="toc-text">Promise对比行为树</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实践"><span class="toc-number">5.</span> <span class="toc-text">实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#行为树状态"><span class="toc-number">5.1.</span> <span class="toc-text">行为树状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本用法"><span class="toc-number">5.2.</span> <span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#节点名"><span class="toc-number">5.3.</span> <span class="toc-text">节点名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#节点类型"><span class="toc-number">5.4.</span> <span class="toc-text">节点类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#行为-叶子节点，Action-Leaf"><span class="toc-number">5.4.1.</span> <span class="toc-text">行为/叶子节点，Action/Leaf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#串行节点"><span class="toc-number">5.4.2.</span> <span class="toc-text">串行节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#并行节点"><span class="toc-number">5.4.3.</span> <span class="toc-text">并行节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#选择节点"><span class="toc-number">5.4.4.</span> <span class="toc-text">选择节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#条件节点"><span class="toc-number">5.4.5.</span> <span class="toc-text">条件节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#反转节点"><span class="toc-number">5.4.6.</span> <span class="toc-text">反转节点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#嵌套行为树"><span class="toc-number">5.5.</span> <span class="toc-text">嵌套行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#行为复用"><span class="toc-number">5.6.</span> <span class="toc-text">行为复用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-行为树"><span class="toc-number">5.7.</span> <span class="toc-text">Promise + 行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#真实例子"><span class="toc-number">5.8.</span> <span class="toc-text">真实例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">6.</span> <span class="toc-text">结论</span></a></li></ol>
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取代码"><span class="toc-number">2.</span> <span class="toc-text">获取代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理论"><span class="toc-number">3.</span> <span class="toc-text">理论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#行为树"><span class="toc-number">3.1.</span> <span class="toc-text">行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#流式API对比传统API"><span class="toc-number">3.2.</span> <span class="toc-text">流式API对比传统API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise对比行为树"><span class="toc-number">3.3.</span> <span class="toc-text">Promise对比行为树</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实践"><span class="toc-number">4.</span> <span class="toc-text">实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#行为树状态"><span class="toc-number">4.1.</span> <span class="toc-text">行为树状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本用法"><span class="toc-number">4.2.</span> <span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#节点名"><span class="toc-number">4.3.</span> <span class="toc-text">节点名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#节点类型"><span class="toc-number">4.4.</span> <span class="toc-text">节点类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#行为-叶子节点，Action-Leaf"><span class="toc-number">4.4.1.</span> <span class="toc-text">行为/叶子节点，Action/Leaf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#串行节点"><span class="toc-number">4.4.2.</span> <span class="toc-text">串行节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#并行节点"><span class="toc-number">4.4.3.</span> <span class="toc-text">并行节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#选择节点"><span class="toc-number">4.4.4.</span> <span class="toc-text">选择节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#条件节点"><span class="toc-number">4.4.5.</span> <span class="toc-text">条件节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#反转节点"><span class="toc-number">4.4.6.</span> <span class="toc-text">反转节点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#嵌套行为树"><span class="toc-number">4.5.</span> <span class="toc-text">嵌套行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#行为复用"><span class="toc-number">4.6.</span> <span class="toc-text">行为复用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-行为树"><span class="toc-number">4.7.</span> <span class="toc-text">Promise + 行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#真实例子"><span class="toc-number">4.8.</span> <span class="toc-text">真实例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">5.</span> <span class="toc-text">结论</span></a></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 			<li><a href="/categories/翻译/" title="翻译">翻译<sup>3</sup></a></li>
@@ -227,7 +226,7 @@
   
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+	<a href="null" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
