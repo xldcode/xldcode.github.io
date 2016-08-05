@@ -1,0 +1,359 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Sheldon的世界</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Sheldon">
+    
+    <meta name="description" content="流式行为树用于AI和游戏逻辑本文翻译自Fluent behavior trees for AI and game-logic，by Ashley Davis
+你是否需要经济有效的方式使用行为树？流式行为树API能够让程序员变成游戏策划，享受传统的行为树的好处，花更少的开发时间。
+这么多年来，我一直对">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Sheldon的世界" title="Sheldon的世界"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Sheldon的世界">Sheldon的世界</a></h1>
+				<h2 class="blog-motto">Keep Calm and Carry On</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/05/Fluent behavior trees for AI and game-logic/" title="" itemprop="url"></a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="Sheldon">Sheldon</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-08-05T20:37:06.269Z" itemprop="datePublished">2016-08-05</time>
+    Updated:<time datetime="2016-08-05T16:37:26.185Z" itemprop="dateModified">2016-08-05</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#流式行为树用于AI和游戏逻辑"><span class="toc-number">1.</span> <span class="toc-text">流式行为树用于AI和游戏逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.2.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取代码"><span class="toc-number">1.3.</span> <span class="toc-text">获取代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理论"><span class="toc-number">1.4.</span> <span class="toc-text">理论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#行为树"><span class="toc-number">1.4.1.</span> <span class="toc-text">行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#流式API对比传统API"><span class="toc-number">1.4.2.</span> <span class="toc-text">流式API对比传统API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise对比行为树"><span class="toc-number">1.4.3.</span> <span class="toc-text">Promise对比行为树</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实践"><span class="toc-number">1.5.</span> <span class="toc-text">实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#行为树状态"><span class="toc-number">1.5.1.</span> <span class="toc-text">行为树状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本用法"><span class="toc-number">1.5.2.</span> <span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#节点名"><span class="toc-number">1.5.3.</span> <span class="toc-text">节点名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#节点类型"><span class="toc-number">1.5.4.</span> <span class="toc-text">节点类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#行为-叶子节点，Action-Leaf"><span class="toc-number">1.5.4.1.</span> <span class="toc-text">行为/叶子节点，Action/Leaf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#串行节点"><span class="toc-number">1.5.4.2.</span> <span class="toc-text">串行节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#并行节点"><span class="toc-number">1.5.4.3.</span> <span class="toc-text">并行节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#选择节点"><span class="toc-number">1.5.4.4.</span> <span class="toc-text">选择节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#条件节点"><span class="toc-number">1.5.4.5.</span> <span class="toc-text">条件节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#反转节点"><span class="toc-number">1.5.4.6.</span> <span class="toc-text">反转节点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#嵌套行为树"><span class="toc-number">1.5.5.</span> <span class="toc-text">嵌套行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#行为复用"><span class="toc-number">1.5.6.</span> <span class="toc-text">行为复用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-行为树"><span class="toc-number">1.5.7.</span> <span class="toc-text">Promise + 行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#真实例子"><span class="toc-number">1.5.8.</span> <span class="toc-text">真实例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">1.6.</span> <span class="toc-text">结论</span></a></li></ol></li></ol>
+		</div>
+		
+		<h1 id="流式行为树用于AI和游戏逻辑"><a href="#流式行为树用于AI和游戏逻辑" class="headerlink" title="流式行为树用于AI和游戏逻辑"></a>流式行为树用于AI和游戏逻辑</h1><p>本文翻译自<a href="http://www.what-could-possibly-go-wrong.com/fluent-behavior-trees-for-ai-and-game-logic/" target="_blank" rel="external">Fluent behavior trees for AI and game-logic</a>，by <a href="http://www.what-could-possibly-go-wrong.com/author/ash/" target="_blank" rel="external">Ashley Davis</a></p>
+<p>你是否需要经济有效的方式使用行为树？流式行为树API能够让程序员变成游戏策划，享受传统的行为树的好处，花更少的开发时间。</p>
+<p>这么多年来，我一直对行为树抱有兴趣。它是行之有效的创建AI和游戏逻辑的方式。许多专业公司的游戏AI策划用行为树编辑器创建行为。</p>
+<p>独立开发者（或说受资金限制的专业开发者）可能不能负担购买或造一个好的行为树编辑器。多数情况下，游戏开发者必须三头六臂，开发中扮演不同的角色。如果这和你的情境相似，你可能不是有太多的的工具任君使用的专业游戏策划。</p>
+<p>本文是技术文档，并提供开源库。我将同时提供一些理论及实践样例。另外我将对比传统的行为树和其他技术</p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>[TOC]</p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><a href="https://en.wikipedia.org/wiki/Behavior_tree_(artificial_intelligence,_robotics_and_control" target="_blank" rel="external">行为树</a>)已经出现在我们视野中有十来年之久了。感谢2005年GDC在<a href="http://www.gamasutra.com/view/feature/130663/gdc_2005_proceeding_handling_.php" target="_blank" rel="external">光环2的AI</a>的分享中，将其引入了游戏产业。自此它在多方媒体包括影响深远的<a href="http://aigamedev.com/" target="_blank" rel="external">AiGameDev.com</a>中备受欢迎。</p>
+<p>本文陈述的技术同时联合了<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank" rel="external">流式API</a>和强大的行为树。现在已是可用的<a href="https://github.com/codecapers/Fluent-Behaviour-Tree" target="_blank" rel="external">开源C#库</a>了。我个人曾在Unity商业游戏<a href="http://www.codecapers.com.au/portfolio/driving-simulator/" target="_blank" rel="external">driving simulator project</a>中使用该技术和类库。该库是常规的C#代码，不限于在Unity中使用。例如你可以轻松应用于<a href="https://en.wikipedia.org/wiki/MonoGame" target="_blank" rel="external">MonoGame</a>中。一个相似的库可运行与C++中，任何人可自由移植到其他语言。</p>
+<p>本文面向那些寻求廉价但能丰富健壮构建AI方式的游戏开发者。廉价指的是你不需要造一个编辑器，也不需要聘用游戏策划使用它。这机制适用于常扮演开发、美术、策划等的独立游戏开发者。</p>
+<p>你若是在公司上班的专业游戏开发者，有专门的AI工具，本文可能帮不到你。那些能够负担造编辑器且聘用策划的公司，请这么做吧。然而流式行为树依旧能够在其他地方帮到你。首先它能让你有行为树的经验，并在学习完全<a href="http://stackoverflow.com/a/1065657/25868" target="_blank" rel="external">数据驱动</a>行为树系统前进行试水。流式行为树为在学习成熟昂贵系统前，提供了廉价的方式认识行为树。</p>
+<p>我在用promise进行游戏开发过程中，萌发关于流式行为树的概念。自我发觉在Real Serious Games的promise库滚雪球般应用后，我甚至写了一篇<a href="http://www.what-could-possibly-go-wrong.com/promises-for-game-development/" target="_blank" rel="external">长文</a>来记录。随着对promise的推进加深，我意识到<a href="http://www.what-could-possibly-go-wrong.com/promises-for-game-development/#almostbehaviourtrees" target="_blank" rel="external">promise长得像行为树了</a>。这导致我思考行为树的流式API，在某些情况下比promise更灵活更恰当。当然，当开发者开始使用流式API后，会自然而然的创造许多使用它们的机会，这点我并不意外。我知道听起来像<a href="https://en.wikipedia.org/wiki/Law_of_the_instrument" target="_blank" rel="external">马斯洛的锤子</a>，但相信我，我还有许多其他工具。流式行为树是工具包中的另外工具，总能恰当的多次被带出使用。</p>
+<h2 id="获取代码"><a href="#获取代码" class="headerlink" title="获取代码"></a>获取代码</h2><p>本C#的行为树库按教科书的说明实现。意思就是，经过研究，我实现了标准的游戏开发行为树库。实现起来很容易，同时添加了一些额外的装饰。它可运行于任何.Net 3.5的环境，那是因为该版本和Unity兼容。如有必要，可升至更高版本。虽然仅在window下进行了测试，但我相信同样适用于移动平台。如果你们发现了任何BUG，请在github上告知。</p>
+<p>代码托管在<a href="https://github.com/codecapers/Fluent-Behaviour-Tree" target="_blank" rel="external">github</a></p>
+<p>你可以直接下载，若是想贡献代码，请fork，并提交pull给我。</p>
+<p>你也可以用vs编译代码，将<a href="http://www.what-could-possibly-go-wrong.com/unity-and-dlls/" target="_blank" rel="external">DLL</a>放在Unity工程中。另外，你也可以直接将源代码放在Unity工程目录下。</p>
+<p>预编译版本可用<a href="http://www.what-could-possibly-go-wrong.com/unity-and-nuget/" target="_blank" rel="external">NuGet</a>下载。</p>
+<h2 id="理论"><a href="#理论" class="headerlink" title="理论"></a>理论</h2><p>在实践流式行为树的细节前，先复习些简明的理论，并提供些资料加深对行为树的理解。</p>
+<p>若你已经精通行为树，请跳过这些章节。</p>
+<h3 id="行为树"><a href="#行为树" class="headerlink" title="行为树"></a>行为树</h3><p>行为树是构建管理模块及可用AI逻辑的神奇方式。专业的游戏策划使用编辑器创建、修改、调试。开发过程中，他们造了许多可用的库和插件式行为。随着时间的推进，这让构建新实体AI变得更快更容易。随着构建AI的过程变成胶合不同预造行为，然后调整它们的属性。编辑器让快速重写AI变得容易，因此能更快迭代提升游戏可玩性。</p>
+<p>行为树表示了实体<em>思考</em>的AI和逻辑。行为树本身无状态，它依赖于实体或环境来保存状态。每次更新时，针对实体或环境状态重新评估行为树。每次更新都是上次更新离开的位置开始。它必须指是什么状态，现在该做什么。</p>
+<p>行为树可扩展成大量AI。它本质是树——层次嵌套无限层。这表明他可以表达任意复杂和深度嵌套AI。它们由模块化组件构造，因此可管理很大的树。它的尺度大小仅依赖于我们要限制多大的树、工具可处理多少、电脑性能。</p>
+<p>网上有许多介绍指导行为树的资料：它如何工作，如何结构化，和其他AI的对比等。我仅提一些基本的资料，以下是链接</p>
+<ul>
+<li><a href="http://guineashots.com/2014/07/25/an-introduction-to-behavior-trees-part-1/" target="_blank" rel="external">介绍行为树</a></li>
+<li><a href="http://aigamedev.com/open/article/bt-overview/" target="_blank" rel="external">理解行为树</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Behavior_tree_(artificial_intelligence,_robotics_and_control" target="_blank" rel="external">行为树–维基百科</a>)</li>
+</ul>
+<h3 id="流式API对比传统API"><a href="#流式API对比传统API" class="headerlink" title="流式API对比传统API"></a>流式API对比传统API</h3><p>传统行为树是由数据载入，它们由可视化编辑器构建编辑，存于文件或数据库中，是<a href="http://stackoverflow.com/a/1065657/25868" target="_blank" rel="external">数据驱动</a>。与此相对，流式行为树通过代码API构建，可以说是代码驱动。</p>
+<p>为什么采用这个方法呢？</p>
+<p>首先，它很廉价，但你依旧可以获取传统行为树的相同好处。可用的第一版流式行为树库可以一天内构建。相对地，需要耗费许多星期去构建个有基本功能的行为树编辑器。假设你是一名程序员，为什么你非要舍近求远，你可以直接码上流式API呀。你可以购买一个编辑器，尤其在Unity商店上有一些选择。尽管花了些银子，也许不贵，但是考虑到你需要投资时间去学习一个特定的包。不仅仅是如何使用编辑器，更包括如何使用API载入并运行行为树。</p>
+<p>编写流式API的过程让我非常愉悦。智能提示很好用，编译器理解我的选择并且能自动补全。</p>
+<p>在代码中定义行为树给了你结构化的方式去一起破解各种行为树模式。我说的是<em>一起破解</em>。你是否曾有过这样的经历，当你在设计某些很棒，清晰，优雅的东西时，才发现在完成前几个月你要破解原始设计不符合游戏需求而变更的噩梦。这让我学到，有一个能够处理破解的架构是多么重要，这样你必然在某一刻作出一款伟大的游戏。寻找能够支撑这样的模块化架构机制，将增加我们快速工作及适应的能力（我们能随时破解），并最终提升我们代码的设计（因为我们能从写代码并砍掉不必要的功能）。我听说这叫<em>designing for disposability</em>，即是以模块化的方式规划系统同时意识到某些模块将会是被抛弃的一坨翔。流式行为树支持模块化和行为分隔，因此我相信他能提供可处理原则。</p>
+<p>并不存在一招吃遍天下的方法。你必须指出自己项目和情形的正确方式，有时制定会适合你。其他时候，你会发现你犯了多大的错误选择一条艰难的路。尝试流式行为树给你的福利能让你避免沉浸过多时间。时间投资最小化，但在时间上的潜在回报是巨大的。这么说来，行为树是个让人喜欢的选择。</p>
+<p>没有什么能最终阻止你混入及匹配各种方法。使用流式API做快速原型，编程测试你的想法。然后使用好的编辑器在你需要的时候构建并部署载入行为到最终产品中。</p>
+<p>为了有效提升使用流式行为树的周转时间，你需要更快的编译时间。你可能更倾用更小的测试平台而不是整个游戏。最终，倘若你的编译时间会拖累你编码、测试流式行为树的改变。若不能容忍这个问题，传统行为树可能更适合你，仅当你能在运行时热载入它们。因此，当你要购买一个行为树编辑器/系统前，请确认是否有该功能。</p>
+<h3 id="Promise对比行为树"><a href="#Promise对比行为树" class="headerlink" title="Promise对比行为树"></a>Promise对比行为树</h3><p>倘若不发点时间讲讲promise，可能会产生疏忽吧。</p>
+<p>在我讲<a href="http://www.what-could-possibly-go-wrong.com/promises-for-game-development/" target="_blank" rel="external">Promise</a>文章中，提出了<a href="http://www.what-could-possibly-go-wrong.com/promises-for-game-development/#almostbehaviourtrees" target="_blank" rel="external">将promise推入行为树的国度</a>。我们已经使用promise去管理异步操作，如载入关卡，资源，从数据库载入数据等。当然，这是promise的意义所在也是其所擅长的。</p>
+<p>开始使用promise去管理其他诸如视频、声音回放的操作，对我们而言并不是个很大的跨越。毕竟这些操作都异步发生且持续一段时间。当它们完成后，一般将触发某些回调，这样我们能够处理序列中的下一个操作。Promise真擅长于此，毕竟它的威力就在于异步操作的序列链。</p>
+<p>当我们认为整个游戏就像异步操作的交织链，就会顿悟。毕竟游戏就是持续多帧的复杂的逻辑链网络。我们扩展promise<a href="http://www.what-could-possibly-go-wrong.com/promises-for-game-development/#promisesforcomposinggamelogic" target="_blank" rel="external">支持游戏逻辑组合</a>，此时，我意识到行为树可能更适合这么做。然而，那是已是项目的后半程且那时我们木有行为树库。所以我们继续并完成了项目。</p>
+<p>从promise上我们获益良多，若我们结合promise和行为树，可能会更好吧。</p>
+<p>我们能让promise更像行为树，但把promise这儿做会有问题，行为树的性质就是解决上述问题。和promise类似，行为树也允许组合或链接逻辑——（异步）发生多帧或游戏循环的迭代。主要的区别点在于他们如何<a href="http://gameprogrammingpatterns.com/update-method.html" target="_blank" rel="external">时钟更新</a>，行为树一般更适合游戏循环的一步接一步的方式。行为树只在游戏循环的每次迭代更新。当行为树停止其更新时钟，行为树逻辑将停止，不再处理。因此取消或退出行为树运行变得极其简单：直接停止更新即可。</p>
+<p>但是运行中的promise并不像行为树那样容易退出。他被设计成在异步操作中自由飞翔，触发也不由时钟或更新函数影响。这意味着除非他完成或发生错误，你几乎无对操作的运行时控制。例如从网上下载文件……它会一直运行直到完成或报错。终止promise链通常调用注入另外的特别promise，它会直接抛出异常事件而使整个promise链都reject。可以用<code>Promise.Race</code>引入<em>可终止promise</em>来针对要中止的promise来实现。这听起来困难且阵痛，因为就是这样。闹铃就该响起。</p>
+<p>自从我在产品中使用流式行为树后，我同样理论验证了promise和行为树可以容易的结合在一起，且二者长处都可以发挥。下一步我将展示例子了。</p>
+<h2 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h2><p>本章节描述如何使用<a href="https://github.com/codecapers/Fluent-Behaviour-Tree" target="_blank" rel="external">流式行为树库</a>。</p>
+<h3 id="行为树状态"><a href="#行为树状态" class="headerlink" title="行为树状态"></a>行为树状态</h3><p>行为树节点将返回以下状态码：</p>
+<ul>
+<li>Success: 节点完成任务并成功。</li>
+<li>Failure: 节点完成，但失败了。</li>
+<li>Running: 节点依旧在运行。</li>
+</ul>
+<h3 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h3><p>行为树对象由 <code>BehaviourTreeBuilder</code> 创建，<code>Build</code>函数将返回完整树的根节点。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">using FluentBehaviourTree;</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">IBehaviourTreeNode tree;</div><div class="line"></div><div class="line">public void Startup()</div><div class="line">&#123;</div><div class="line">    var builder = new BehaviourTreeBuilder();</div><div class="line">    this.tree = builder</div><div class="line">        .Sequence(&quot;my-sequence&quot;)</div><div class="line">            .Do(&quot;action1&quot;, t =&gt; &#123;</div><div class="line">                // ... do something ...</div><div class="line">                return BehaviourTreeStatus.Success;</div><div class="line">            &#125;)</div><div class="line">            .Do(&quot;action2&quot;, t =&gt; &#123;</div><div class="line">                // ... do something after ...</div><div class="line">                return BehaviourTreeStatus.Success;</div><div class="line">            &#125;)</div><div class="line">        .End()</div><div class="line">        .Build();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>注意，必须在游戏循环中添加行为树的时钟更新。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public void Update(float deltaTime)</div><div class="line">&#123;</div><div class="line">    this.tree.Tick(new TimeData(deltaTime));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="节点名"><a href="#节点名" class="headerlink" title="节点名"></a>节点名</h3><p>上述代码在创建节点时指定了名字。</p>
+<p>这些名字纯粹为了测试及调试的目的。这让树可视化渲染，更容易看到AI的状态。另外提一下 <em>调试可视化</em> 同样在游戏开发中非常重要，它能帮助理解和调试游戏在做啥。</p>
+<h3 id="节点类型"><a href="#节点类型" class="headerlink" title="节点类型"></a>节点类型</h3><p>提供了以下的行为树节点类型</p>
+<h4 id="行为-叶子节点，Action-Leaf"><a href="#行为-叶子节点，Action-Leaf" class="headerlink" title="行为/叶子节点，Action/Leaf"></a>行为/叶子节点，Action/Leaf</h4><p><code>Do</code>函数创建了行为节点，成为行为树的叶子节点。返回的状态（Success、Failure、Running）值指明了目前的节点状态。<br><img src="http://www.what-could-possibly-go-wrong.com/content/images/2016/02/Action.png" alt="叶子节点"></p>
+<h4 id="串行节点"><a href="#串行节点" class="headerlink" title="串行节点"></a>串行节点</h4><p>串行执行每个子节点。一旦子节点失败，其也宣告失败态。前一个子节点成功后才会执行下一个子节点。当子节点还在运行时，返回运行态。所有子节点都成功后，返回成功态。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">.Sequence(&quot;my-sequence&quot;)</div><div class="line">    .Do(&quot;action1&quot;, t =&gt;</div><div class="line">    &#123;</div><div class="line">        // Sequential action 1.</div><div class="line">        return BehaviourTreeStatus.Success; // Run this.</div><div class="line">    &#125;);</div><div class="line">    .Do(&quot;action2&quot;, t =&gt;</div><div class="line">    &#123;</div><div class="line">        // Sequential action 2.</div><div class="line">        return BehaviourTreeStatus.Success; // Then run this.</div><div class="line">    &#125;)</div><div class="line">.End()</div></pre></td></tr></table></figure></p>
+<p><img src="http://www.what-could-possibly-go-wrong.com/content/images/2016/02/Sequence.png" alt="串行节点"></p>
+<h4 id="并行节点"><a href="#并行节点" class="headerlink" title="并行节点"></a>并行节点</h4><p>所有子节点并行执行。直到特定数目的子节点成功或失败后才返回。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">int numRequiredToFail = 2;</div><div class="line">int numRequiredToSucceed = 2;</div><div class="line"></div><div class="line">.Parallel(&quot;my-parallel&quot;, numRequiredToFail, numRequiredToSucceed)</div><div class="line">    .Do(&quot;action1&quot;, t =&gt;</div><div class="line">    &#123;</div><div class="line">        // Parallel action 1.</div><div class="line">        return BehaviourTreeStatus.Running;</div><div class="line">    &#125;);</div><div class="line">    .Do(&quot;action2&quot;, t =&gt;</div><div class="line">    &#123;</div><div class="line">        // Parallel action 2.</div><div class="line">        return BehaviourTreeStatus.Running;</div><div class="line">    &#125;)</div><div class="line">.End()</div></pre></td></tr></table></figure></p>
+<p><img src="http://www.what-could-possibly-go-wrong.com/content/images/2016/02/Parallel.png" alt="并行节点"></p>
+<h4 id="选择节点"><a href="#选择节点" class="headerlink" title="选择节点"></a>选择节点</h4><p>串行执行子节点，直到某个子节点成功。找到第一个成功的子节点，返回成功态。前一个子节点失败后才移步下一个。子节点运行时不会换成下一个子节点。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">.Selector(&quot;my-selector&quot;)</div><div class="line">    .Do(&quot;action1&quot;, t =&gt;</div><div class="line">    &#123;</div><div class="line">        // Action 1.</div><div class="line">        return BehaviourTreeStatus.Failure; // Fail, move onto next child.</div><div class="line">    &#125;);</div><div class="line">    .Do(&quot;action2&quot;, t =&gt;</div><div class="line">    &#123;</div><div class="line">        // Action 2.</div><div class="line">        return BehaviourTreeStatus.Success; // Success, stop here.</div><div class="line">    &#125;)</div><div class="line">    .Do(&quot;action3&quot;, t =&gt;</div><div class="line">    &#123;</div><div class="line">        // Action 3.</div><div class="line">        return BehaviourTreeStatus.Success; // Doesn&apos;t get this far.</div><div class="line">    &#125;)</div><div class="line">.End()</div></pre></td></tr></table></figure></p>
+<p><img src="http://www.what-could-possibly-go-wrong.com/content/images/2016/02/Selector.png" alt="选择节点"></p>
+<h4 id="条件节点"><a href="#条件节点" class="headerlink" title="条件节点"></a>条件节点</h4><p>条件节点是<code>Do</code>的语法糖。它运行返回布尔值，然后转化成节点状态表示。通常配合选择节点使用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">.Selector(&quot;my-selector&quot;)</div><div class="line">    .Condition(&quot;condition&quot;, t=&gt;SomeCondition())</div><div class="line">    .Do(&quot;action&quot;, t=&gt;SomeAction())</div><div class="line">.End()</div></pre></td></tr></table></figure></p>
+<p><img src="http://www.what-could-possibly-go-wrong.com/content/images/2016/02/Condition.png" alt="条件节点"></p>
+<h4 id="反转节点"><a href="#反转节点" class="headerlink" title="反转节点"></a>反转节点</h4><p>反转子节点的状态（Success、Failure）。子节点为运行态时，返回Running。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">.Inverter(&quot;inverter&quot;)</div><div class="line">     // *Success* will be inverted to *failure*.</div><div class="line">    .Do(&quot;action&quot;, t =&gt; BehaviourTreeStatus.Success)</div><div class="line">.End()</div><div class="line"></div><div class="line">.Inverter(&quot;inverter&quot;)</div><div class="line">     // *Failure* will be inverted to *success*.</div><div class="line">    .Do(&quot;action&quot;, t =&gt; BehaviourTreeStatus.Failure)</div><div class="line">.End()</div></pre></td></tr></table></figure></p>
+<h3 id="嵌套行为树"><a href="#嵌套行为树" class="headerlink" title="嵌套行为树"></a>嵌套行为树</h3><p>行为树可以任意深度进行嵌套，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">.Selector(&quot;parent&quot;)</div><div class="line">    .Sequence(&quot;child-1&quot;)</div><div class="line">        ...</div><div class="line">        .Parallel(&quot;grand-child&quot;)</div><div class="line">            ...</div><div class="line">        .End()</div><div class="line">        ...</div><div class="line">    .End()</div><div class="line">    .Sequence(&quot;child-2&quot;)</div><div class="line">        ...</div><div class="line">    .End()</div><div class="line">.End()</div></pre></td></tr></table></figure></p>
+<h3 id="行为复用"><a href="#行为复用" class="headerlink" title="行为复用"></a>行为复用</h3><p>分别建立的子树可以合并到父树中。这使得行为树能复用，易于创建。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">private IBehaviourTreeNode CreateSubTree()</div><div class="line">&#123;</div><div class="line">    var builder = new BehaviourTreeBuilder();</div><div class="line">    return builder</div><div class="line">        .Sequence(&quot;my-sub-tree&quot;)</div><div class="line">            .Do(&quot;action1&quot;, t =&gt;</div><div class="line">            &#123;</div><div class="line">                // Action 1.</div><div class="line">                return BehaviourTreeStatus.Success;</div><div class="line">            &#125;);</div><div class="line">            .Do(&quot;action2&quot;, t =&gt;</div><div class="line">            &#123;</div><div class="line">                // Action 2.</div><div class="line">                return BehaviourTreeStatus.Success;</div><div class="line">            &#125;);</div><div class="line">        .End()</div><div class="line">        .Build();</div><div class="line">&#125;</div><div class="line"></div><div class="line">public void Startup()</div><div class="line">&#123;</div><div class="line">    var builder = new BehaviourTreeBuilder();</div><div class="line">    this.tree = builder</div><div class="line">        .Sequence(&quot;my-parent-sequence&quot;)</div><div class="line">            .Splice(CreateSubTree()) // Splice the child tree in.</div><div class="line">            .Splice(CreateSubTree()) // Splice again.</div><div class="line">        .End()</div><div class="line">        .Build();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="Promise-行为树"><a href="#Promise-行为树" class="headerlink" title="Promise + 行为树"></a>Promise + 行为树</h3><p>下例为理想化例子展示结合行为树及promise的威力，通过 <code>promise timer</code>综合在一起。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">PromiseTimer promiseTimer = new PromiseTimer();</div><div class="line"></div><div class="line">public void Update(float deltaTime)</div><div class="line">&#123;</div><div class="line">    promiseTimer.Update(deltaTime);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public IPromise StartActivity()</div><div class="line">&#123;</div><div class="line">    IBehaviourTreeNode behaviorTree = ... create your behavior tree ...</div><div class="line"></div><div class="line">    return promiseTimer.WaitUntil(t =&gt;</div><div class="line">        behaviorTree.Update(t.elapsedTime) == BehaviourTreeStatus.Success</div><div class="line">    );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><code>StartActivity</code>启动的活动表示行为树，当行为树完成后使用promise的定时器<code>WaitUtil</code>去resolve promise。这仅是简单的方式组合行为树和promise。</p>
+<p>可以简单的重载<code>WaitUtil</code>函数，传入行为树作为参数来直接提升使用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public IPromise StartActivity()</div><div class="line">&#123;</div><div class="line">    IBehaviourTreeNode behaviorTree = ... create your behavior tree ...</div><div class="line"></div><div class="line">    return promiseTimer.WaitUntil(</div><div class="line">        behaviorTree,</div><div class="line">        BehaviourTreeStatus.Success</div><div class="line">    );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="真实例子"><a href="#真实例子" class="headerlink" title="真实例子"></a>真实例子</h3><p>现在展示下真是例子。代码源自<a href="http://www.codecapers.com.au/portfolio/driving-simulator/" target="_blank" rel="external">the driving simulator project</a>。例子很大，但从方案上来看，使用行为树实际上非常简单。赛车模拟驾驶的AI非常复杂，但是用行为树，这一切变得更可控。</p>
+<p>先提供些帮助函数来使用行为树。因此实际的的检索、更新实体及环境都委托给帮助函数来实现。细节不表，我仅高屋建瓴的展示行为树的高层逻辑。</p>
+<p>以下代码构建了赛车行为树AI<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line">behaviourTree = builder</div><div class="line">    .Begin()</div><div class="line">        .Parallel(&quot;All&quot;, 20, 20)</div><div class="line">            .Do(&quot;ComputeWaypointDist&quot;, t =&gt; ComputeWaypointDist())</div><div class="line"></div><div class="line">            // Always try to go at at the speed limit.</div><div class="line">            .Do(&quot;SpeedLimit&quot;, t =&gt; SpeedLimit())</div><div class="line">            .Sequence(&quot;Cornering&quot;)</div><div class="line">                .Condition(&quot;IsApproachingCorner&quot;,</div><div class="line">                    t =&gt; IsApproachingCorner()</div><div class="line">                )</div><div class="line"></div><div class="line">                // Slow down vehicles that are approaching a corner.</div><div class="line">                .Do(&quot;Cornering&quot;, t =&gt; ApplyCornering())</div><div class="line">            .End()</div><div class="line"></div><div class="line">            // Always attempt to detect other vehicles.</div><div class="line">            .Do(&quot;Detect&quot;, t =&gt; DetectOtherVehicles())</div><div class="line">            .Sequence(&quot;React to blockage&quot;)</div><div class="line">                .Condition(&quot;Approaching Vehicle&quot;,</div><div class="line">                    t =&gt; IsApproachingVehicle()</div><div class="line">                )</div><div class="line"></div><div class="line">                // Always attempt to match speed with the vehicle in front.</div><div class="line">                .Do(&quot;Match Speed&quot;, t =&gt; MatchSpeed())</div><div class="line">            .End()</div><div class="line">            .Selector(&quot;Stuff&quot;)</div><div class="line"></div><div class="line">                // Slow down for give way or stop sign.</div><div class="line">                .Sequence(&quot;Traffic Light&quot;)</div><div class="line">                    .Condition(&quot;IsApproaching&quot;, t =&gt; IsApproachingSignal())</div><div class="line"></div><div class="line">                    // Slow down for the stop sign.</div><div class="line">                    .Do(&quot;ApproachStopSign&quot;, t =&gt; ApproachStopSign())</div><div class="line"></div><div class="line">                    // Wait for complete stop.</div><div class="line">                    .Do(&quot;WaitForSpeedZero&quot;, t =&gt; WhenSpeedIsZero())</div><div class="line"></div><div class="line">                    // Wait at stop sign until the way is clear.</div><div class="line">                    .Do(&quot;WaitForGreenSignal&quot;, t =&gt; WaitForGreenSignal())</div><div class="line">                    .Selector(&quot;NextWaypoint Or Recycle&quot;)</div><div class="line">                        .Condition(&quot;SelectNextWaypoint&quot;,</div><div class="line">                            t =&gt; TargetNextWaypoint()</div><div class="line">                        )</div><div class="line"></div><div class="line">                        // If selection of waypoint fails, recycle vehicle.</div><div class="line">                        .Do(&quot;Recycle&quot;, t =&gt; RecycleVehicle())</div><div class="line">                    .End()</div><div class="line">                .End()</div><div class="line"></div><div class="line">                // Slow down for give way or stop sign.</div><div class="line">                .Sequence(&quot;Stop Sign&quot;)</div><div class="line">                    .Condition(&quot;IsApproaching&quot;,</div><div class="line">                        t =&gt; IsApproachingStopSign()</div><div class="line">                    )</div><div class="line"></div><div class="line">                    // Slow down for the stop sign.</div><div class="line">                    .Do(&quot;ApproachStopSign&quot;, t =&gt; ApproachStopSign())</div><div class="line"></div><div class="line">                    // Wait for complete stop.</div><div class="line">                    .Do(&quot;WaitForSpeedZero&quot;, t =&gt; WhenSpeedIsZero())</div><div class="line"></div><div class="line">                    // Wait at stop sign until the way is clear.</div><div class="line">                    .Do(&quot;WaitForClearAwareness&quot;,</div><div class="line">                        t =&gt; WaitForClearAwarenessZone()</div><div class="line">                    )</div><div class="line">                    .Selector(&quot;NextWaypoint Or Recycle&quot;)</div><div class="line">                        .Condition(&quot;SelectNextWaypoint&quot;,</div><div class="line">                            t =&gt; TargetNextWaypoint()</div><div class="line">                        )</div><div class="line"></div><div class="line">                        // If selection of waypoint fails, recycle vehicle.</div><div class="line">                        .Do(&quot;Recycle&quot;, t =&gt; RecycleVehicle())</div><div class="line">                    .End()</div><div class="line">                .End()</div><div class="line">                .Sequence(&quot;Follow path then recycle&quot;)</div><div class="line">                    .Do(&quot;ApproachWaypoint&quot;, t =&gt; ApproachWaypoint())</div><div class="line">                    .Selector(&quot;NextWaypoint Or Recycle&quot;)</div><div class="line">                        .Condition(&quot;SelectNextWaypoint&quot;,</div><div class="line">                            t =&gt; TargetNextWaypoint()</div><div class="line">                        )</div><div class="line"></div><div class="line">                        // If selection of waypoint fails, recycle vehicle.</div><div class="line">                        .Do(&quot;Recycle&quot;, t =&gt; RecycleVehicle())</div><div class="line">                    .End()</div><div class="line">                .End()</div><div class="line">            .End()</div><div class="line"></div><div class="line">            // Drive the vehicle based on desired speed and direction.</div><div class="line">            .Do(&quot;Drive&quot;, t =&gt; DriveVehicle())</div><div class="line">        .End()</div><div class="line">    .End()</div><div class="line">    .Build();</div></pre></td></tr></table></figure></p>
+<p>流程图如下：<br><img src="http://www.what-could-possibly-go-wrong.com/content/images/2016/02/Top_level.png" alt="流程图"></p>
+<p>以下关于交通灯逻辑的子树<br><img src="http://www.what-could-possibly-go-wrong.com/content/images/2016/02/Traffic_Light.png" alt="交通灯子树"></p>
+<p>以下是路径跟随逻辑的子树<br><img src="http://www.what-could-possibly-go-wrong.com/content/images/2016/02/Follow_path.png" alt="路径跟随子树"></p>
+<p>例子我遮盖了了大量细节。我更想在高处用流程图阐释代码中的树结构。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>本文中，我解释了如何用流式API编码行为树。本文聚焦于<a href="https://github.com/codecapers/Fluent-Behaviour-Tree" target="_blank" rel="external">行为树库</a>及其例子。这技术我已经在实际商业Unity项目中使用了。我期待找未来能找到更多使用流式行为树的机会，并持续构想并分享在这里。</p>
+<p>若是你有改进库的想法，请fork并提交你的代码。同样有问题也请告诉我。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2016/08/05/Fluent behavior trees for AI and game-logic/" data-title="Sheldon的世界" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/08/05/Using promises for Unity async operations/"  title="">
+ <strong>NEXT:</strong><br/> 
+ <span>(no title)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#流式行为树用于AI和游戏逻辑"><span class="toc-number">1.</span> <span class="toc-text">流式行为树用于AI和游戏逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.2.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取代码"><span class="toc-number">1.3.</span> <span class="toc-text">获取代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理论"><span class="toc-number">1.4.</span> <span class="toc-text">理论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#行为树"><span class="toc-number">1.4.1.</span> <span class="toc-text">行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#流式API对比传统API"><span class="toc-number">1.4.2.</span> <span class="toc-text">流式API对比传统API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise对比行为树"><span class="toc-number">1.4.3.</span> <span class="toc-text">Promise对比行为树</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实践"><span class="toc-number">1.5.</span> <span class="toc-text">实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#行为树状态"><span class="toc-number">1.5.1.</span> <span class="toc-text">行为树状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本用法"><span class="toc-number">1.5.2.</span> <span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#节点名"><span class="toc-number">1.5.3.</span> <span class="toc-text">节点名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#节点类型"><span class="toc-number">1.5.4.</span> <span class="toc-text">节点类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#行为-叶子节点，Action-Leaf"><span class="toc-number">1.5.4.1.</span> <span class="toc-text">行为/叶子节点，Action/Leaf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#串行节点"><span class="toc-number">1.5.4.2.</span> <span class="toc-text">串行节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#并行节点"><span class="toc-number">1.5.4.3.</span> <span class="toc-text">并行节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#选择节点"><span class="toc-number">1.5.4.4.</span> <span class="toc-text">选择节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#条件节点"><span class="toc-number">1.5.4.5.</span> <span class="toc-text">条件节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#反转节点"><span class="toc-number">1.5.4.6.</span> <span class="toc-text">反转节点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#嵌套行为树"><span class="toc-number">1.5.5.</span> <span class="toc-text">嵌套行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#行为复用"><span class="toc-number">1.5.6.</span> <span class="toc-text">行为复用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-行为树"><span class="toc-number">1.5.7.</span> <span class="toc-text">Promise + 行为树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#真实例子"><span class="toc-number">1.5.8.</span> <span class="toc-text">真实例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">1.6.</span> <span class="toc-text">结论</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://yoursite.com" target="_blank" title="Sheldon">Sheldon</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>

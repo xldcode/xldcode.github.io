@@ -1,0 +1,433 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Sheldon的世界</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Sheldon">
+    
+    <meta name="description" content="使用Promise进行游戏开发本文翻译自Promises for Game Development, by Ashley Davis 和 Adam Single
+引言本文中，我将分享使用Promise进行游戏开发的经验。旨在揭示为什么promise能有提升游戏开发进程。
+本文不面向初学者。读者需要初">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Sheldon的世界" title="Sheldon的世界"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Sheldon的世界">Sheldon的世界</a></h1>
+				<h2 class="blog-motto">Keep Calm and Carry On</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/05/Promises for Game Development/" title="" itemprop="url"></a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="Sheldon">Sheldon</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-08-05T20:37:06.269Z" itemprop="datePublished">2016-08-05</time>
+    Updated:<time datetime="2016-08-05T02:03:05.989Z" itemprop="dateModified">2016-08-04</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#使用Promise进行游戏开发"><span class="toc-number">1.</span> <span class="toc-text">使用Promise进行游戏开发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.2.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍promise"><span class="toc-number">1.3.</span> <span class="toc-text">介绍promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Promise进行游戏开发-1"><span class="toc-number">1.4.</span> <span class="toc-text">使用Promise进行游戏开发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise对C-的帮助"><span class="toc-number">1.5.</span> <span class="toc-text">Promise对C#的帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise-对游戏开发的帮助"><span class="toc-number">1.6.</span> <span class="toc-text">Promise 对游戏开发的帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于异步资源载入"><span class="toc-number">1.7.</span> <span class="toc-text">Promise用于异步资源载入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于组合游戏逻辑"><span class="toc-number">1.8.</span> <span class="toc-text">Promise用于组合游戏逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-All"><span class="toc-number">1.8.1.</span> <span class="toc-text">Promise.All</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-Race"><span class="toc-number">1.8.2.</span> <span class="toc-text">Promise.Race</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-Sequence"><span class="toc-number">1.8.3.</span> <span class="toc-text">Promise.Sequence</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于时间逻辑"><span class="toc-number">1.9.</span> <span class="toc-text">Promise用于时间逻辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于条件门控"><span class="toc-number">1.10.</span> <span class="toc-text">Promise用于条件门控</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#嵌套Promise"><span class="toc-number">1.11.</span> <span class="toc-text">嵌套Promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise对比Unity协程"><span class="toc-number">1.12.</span> <span class="toc-text">Promise对比Unity协程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#就是某种形式的行为树？"><span class="toc-number">1.13.</span> <span class="toc-text">就是某种形式的行为树？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">1.14.</span> <span class="toc-text">结论</span></a></li></ol></li></ol>
+		</div>
+		
+		<h1 id="使用Promise进行游戏开发"><a href="#使用Promise进行游戏开发" class="headerlink" title="使用Promise进行游戏开发"></a>使用Promise进行游戏开发</h1><p>本文翻译自<a href="http://www.what-could-possibly-go-wrong.com/promises-for-game-development/" target="_blank" rel="external">Promises for Game Development</a>, by <a href="http://www.what-could-possibly-go-wrong.com/author/ash/" target="_blank" rel="external">Ashley Davis</a> 和 Adam Single</p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本文中，我将分享使用<a href="http://en.wikipedia.org/wiki/Futures_and_promises" target="_blank" rel="external">Promise</a>进行游戏开发的经验。旨在揭示为什么promise能有提升游戏开发进程。</p>
+<p>本文不面向初学者。读者需要初级至中级以上的C#水平。本文将帮助为游戏规模扩大而深陷泥潭的你们。读者需要已经了解管理异步操作链、复杂网页的相互依赖及基于时间序列游戏逻辑的难点。本文便是你所要寻找的良方用于构建更好的代码结构，他将给你一个全新的选择。</p>
+<p>本文会先介绍一下什么是promises及泛泛说明下它在游戏开发中如何有用。这样抛砖引玉，能够更好的了解promise所应用在游戏开发中的具体情形。这将引领我们探讨如何扩展promise模式去应对更高级的游戏开发问题：组合小单元游戏逻辑、基于时间序列的逻辑及构建条件门逻辑。最后，比较promise和其他你曾考虑或用过的模式。</p>
+<p>请不要在阅读本文时假定promise适用于任何情形。他并不是游戏开发的唯一工具。Promise是构建复杂异步代码的强大工具，起眼可能很难喜欢。介于异步代码越来越流行，我们需要类似promise的模式去帮助我们更好的驯服越来越复杂的代码。</p>
+<p>在Real Serious Games中，我们使用Unity,C#。如果你试图使用C#版promise(绑定于任何C#游戏引擎，不限于Unity)，你可以使用我们的<a href="https://github.com/Real-Serious-Games/c-sharp-promise" target="_blank" rel="external">promise类库</a>。如果你使用Javascript版promise,有太多类库可以任意使用，甚至新版本的JS还自带promise。如果你使用其他编程语言，该技术依旧适用，但是你可能要好点时间找个好用的promise库。</p>
+<p>同样有些unity例子使用promise在<a href="https://github.com/adamsingle/PromisesUnityDemo" target="_blank" rel="external">github</a>上</p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>[TOC]</p>
+<h2 id="介绍promise"><a href="#介绍promise" class="headerlink" title="介绍promise"></a>介绍promise</h2><p>Promise 是一种设计模式，它构建异步代码及平滑（依赖）异步运行序列的复杂性。</p>
+<p>最近有篇<a href="https://blog.domenic.me/youre-missing-the-point-of-promises/" target="_blank" rel="external">文章</a>帮助我更具体的认识到promise是怎么帮到我们的。通常而言，运行中的异步函数很难获取其返回结果。另外，处理错误及异常也很难实现。当异步代码抛出异常时会发生什么？promise很有说服力的一点是，他给了我们在异步世界中返回<a href="https://en.wikipedia.org/wiki/Function_composition_(computer_science" target="_blank" rel="external">函数组合</a>)及异常处理(<a href="https://en.wikipedia.org/wiki/Exception_handling)。" target="_blank" rel="external">https://en.wikipedia.org/wiki/Exception_handling)。</a></p>
+<p>Promise抽象化成绑定多个异步操作到单一第一类值对象的管道。可以认为，promise定下异步约定只有成功或失败。</p>
+<p>每个异步操作的结果通过管道传递。这样异步代码能容易地获取并操作结果。当管道完全成功后，<em>success回调</em>将被调用。</p>
+<p><img src="http://www.what-could-possibly-go-wrong.com/content/images/2015/06/PromisesPipeline-1.png" alt="运行成功的管道图"></p>
+<p>Promise同样还有强大的错误处理机制（具体而言，类似异常处理），允许错误处理者在管道的任何阶段介入。倘若只关心整个异步序列的成功还是失败，可以把异常处理放在管道的最后。一旦管道的任何阶段发生错误，后续管道将短路求值并把控制权转移给错误处理者。这很像try-catch机制。</p>
+<p><img src="http://www.what-could-possibly-go-wrong.com/content/images/2015/06/PromisesErrors-1.png" alt="发生异常的管道图"></p>
+<p>用JS开发网页应用的经历让我们发现了promise。这里说的JS是完全版本JS，而不是Unity版的伪JS。阅读维基百科后发现，promise由<a href="https://en.wikipedia.org/wiki/Functional_programming" target="_blank" rel="external">函数式编程语言</a>移植到JS，函数式语言真是好东西的发源地呀。</p>
+<p>Promise在JS中常被颂赞其解决反模式——<a href="http://callbackhell.com/" target="_blank" rel="external">回调地狱</a>。虽然有很多JS类库用于管理异步代码，但是promise从中杀出，成为标准库的一部分。</p>
+<p>好吧，现在概述下promise如何帮助进行游戏开发。</p>
+<h2 id="使用Promise进行游戏开发-1"><a href="#使用Promise进行游戏开发-1" class="headerlink" title="使用Promise进行游戏开发"></a>使用Promise进行游戏开发</h2><p>游戏如何架构？Promise如何促进游戏开发？</p>
+<p>你可能认为游戏只是时间序列——依赖一个接一个的活动，依赖前置活动或玩家输入。当玩家满足一定目标后，达成游戏或等级。目标又依赖活动及前置目标……如果能从4维视角看，游戏就像挂毯样，交织着这种复杂的目标及依赖。</p>
+<p>一些游戏开发工具包以优雅易懂的方式帮助连接目标及活动依赖，且游戏演变后同样容易修改。当然，现在有许多可用的模式来架构游戏代码：策略模式、有限状态机、层次状态机、行为树、脚本化、协程、消息事件、实体组件系统等等，每个都是值得深入理解的。</p>
+<p>我想说的是，primise也隶属于其中。它是简明的备选，适用于不同任务情形，你甚至可以直接使用它们。promise的威力在于它能把整个活动序列当做单一的实体。这是promise能被复用的基础，你可以搭建越来越大的组件，其组合多种游戏逻辑及行为。这样的代码易读、易懂、易维护。</p>
+<p>Promise已经在许多传统异步操作如载入资源中被直接使用。同样可用于序列移动，动画及变成声音序列而更好的调用过场动画。但是对于一些更复杂的逻辑，我们必须加深认识promis模式。开始前，先复习下C#中promise的基本使用。</p>
+<h2 id="Promise对C-的帮助"><a href="#Promise对C-的帮助" class="headerlink" title="Promise对C#的帮助"></a>Promise对C#的帮助</h2><p>在<a href="https://github.com/real-serious-games/" target="_blank" rel="external">Real Serious Games</a>中，编写了C#版的promise模式，它直接改善异步任务代码的设计，如载入资源。这种情形下，异步载入比阻塞等待载入完成后回调更值得选择。这样做让线程能够处理其他逻辑，或简单说可以让UI保持响应。</p>
+<p>通过一些例子来明白promise的基本内容吧。</p>
+<p>异步操作通常由函数返回promise开始，先看看如下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public IPromise&lt;MyAsset&gt; LoadAsset(string assetPath)</div><div class="line">&#123;</div><div class="line">    // ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><em>LoadAsset</em> 初始化了一个基于Promise的异步操作：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var promise = new Promise&lt;MyAsset&gt;();</div><div class="line"></div><div class="line">// ... start the async operation ...</div><div class="line"></div><div class="line">return promise;</div></pre></td></tr></table></figure></p>
+<p>这里，异步操作在返回promise前。调用者可以直接使用返回的promise对象（通过他的 <a href="http://en.wikipedia.org/wiki/Fluent_interface" target="_blank" rel="external">fluent API</a>）,甚至异步代码还在执行中，并没有完成。</p>
+<p>异步操作完成后，无论如何都会发送通知，<em>LoadAsset</em> resolve Promise<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">promise.Resolve(theLoadedAsset);</div></pre></td></tr></table></figure></p>
+<p>解决了的proimse会触发下游回调管道，它由调用者用函数<em>Then</em>,<em>ThenAll</em>,<em>Done</em>定义。</p>
+<p>最简单的管道单单使用<em>Done</em>附在管道回调的最后：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">LoadAsset(someAssetPath)</div><div class="line">    .Done(myAsset =&gt; OnAssetLoaded(myAsset));</div></pre></td></tr></table></figure></p>
+<p>多操作可以链上<em>Then</em>，例子如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">LoadAsset(someAssetPath)</div><div class="line">    .Then(myAsset =&gt; LoadAsset(myAsset.LinkedAssetPath))</div><div class="line">    .Done(nextAsset =&gt; OnAssetLoaded(nextAsset));</div></pre></td></tr></table></figure></p>
+<p>上述匿名函数定义了每个管道阶段的回调仅在promise被resolve后才被调用。每个管道阶段返回一个全新promise对象，它表达新异步操作必须在管道能到下一个阶段（或在最后阶段，由<em>Done</em>指定）完成。</p>
+<p>这是个琐碎的例子，但是希望能够开始见识到promise的威力。</p>
+<p>进一步说，RSG Promise库增加了新功能能够链接多依赖promise。例子使用<em>ThenAll</em>载入多关联资源：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">LoadAsset(someAssetPath)</div><div class="line">    .ThenAll(myAsset =&gt; myAsset.LinkedAssets.Select(path =&gt; LoadAsset(path)))</div><div class="line">    .Done(linedAsset =&gt; OnAllAssetLoaded());</div></pre></td></tr></table></figure></p>
+<p><em>ThenAll</em>传入的回调返回promise的集合。所有的promise完成后管道才会继续。LINQ SELECT转换关联资源集合成载入资源的promise集合。作为C#程序员，我更倾向于使用LINQ的<a href="https://msdn.microsoft.com/en-us/library/bb397947.aspx" target="_blank" rel="external">方法语法而不是检索语法</a></p>
+<p>Promise所做的最大工作仅仅是如何简单的管理异步操作序列链。想插入新的操作到管道中？这么修改就可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">LoadAsset(someAssetPath)</div><div class="line">    .ThenAll(myAsset =&gt; myAsset.LinkedAssets.Select(path=&gt;LoadAsset(path)))</div><div class="line">    .Then(LinkedAssets =&gt; SomeOtherAsyncOperation(linkedAssets))</div><div class="line">    .Then(somethingElse =&gt; AndAnotherAsyncOperation(somethingElse))</div><div class="line">    .Done(somethingElseAgain =&gt; OnAllAssetsLoaded(somethingElseAgain));</div></pre></td></tr></table></figure></p>
+<p>C#版的promise库及其文档可以在<a href="https://github.com/Real-Serious-Games/C-Sharp-Promise" target="_blank" rel="external">github</a>上找到</p>
+<h2 id="Promise-对游戏开发的帮助"><a href="#Promise-对游戏开发的帮助" class="headerlink" title="Promise 对游戏开发的帮助"></a>Promise 对游戏开发的帮助</h2><p>游戏开发中，有太多的情形需要等待异步操作完成或满足一些条件。以下是一些情形：</p>
+<ul>
+<li>网上下载文件、数据</li>
+<li>动画结束后播放粒子特效</li>
+<li>动画结束后播放声音特效</li>
+<li>移动摄像机到指定位置</li>
+<li>等待玩家死亡</li>
+<li>等待玩家损失所有生命</li>
+<li>等待玩家输入</li>
+<li>等待超时</li>
+<li>等待成就的所有要求被满足</li>
+</ul>
+<p>接下来的章节中，我们通过例子将由简入繁地探讨游戏开发中的promise.</p>
+<h2 id="Promise用于异步资源载入"><a href="#Promise用于异步资源载入" class="headerlink" title="Promise用于异步资源载入"></a>Promise用于异步资源载入</h2><p>游戏通常需要异步操作。无论是加载、初始化亦或是运行时操作等需要在多帧中执行的操作。启动时，需载入所需资源。也许这些数据需要从云端数据库推送。其它系统的初始化依赖这些数据。</p>
+<p>拙略的尝试是频繁轮询载入是否完成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public void Update(float deltaTime)</div><div class="line">&#123;</div><div class="line">    if(! gameLoaded)</div><div class="line">    &#123;</div><div class="line">        if (gameLoadFinished)</div><div class="line">        &#123;</div><div class="line">            // loading has finished.</div><div class="line">            gameLoaded = true;</div><div class="line"></div><div class="line">            // Initialize systems ...</div><div class="line">        &#125; else</div><div class="line">        &#123;</div><div class="line">            // Not load yet, maybe process the loading screen animation.</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">    &#125;else</div><div class="line">    &#123;</div><div class="line">        // Game is Loaded ...</div><div class="line">        // Update AI, world, etc.</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>轮询是有用的，但却是<a href="http://stackoverflow.com/questions/320284/what-is-wrong-with-polling" target="_blank" rel="external">坏习惯</a>。你也可以看到，上述代码是如何的愚笨及不雅。</p>
+<p>上述编码风格会随着初始依赖的增加而快速复杂化。先不考虑其他问题，若失败后怎么处理及恢复？难道继续轮询某个错误条件？</p>
+<p>上述轮询让我想到 <em>计算pull模式</em>中询问对象状态是否改变。<a href="http://www.introtorx.com/content/v1.0.10621.0/01_WhyRx.html" target="_blank" rel="external">依据Lee Campbell的观点</a>，世界已经是 <em>push模式</em>， 但是开发者依旧在追赶中。<em>push</em>模式中，更多是通知状态变化，而不是去询问。</p>
+<p>使用C# 的events,能够进入<em>push模式</em>的国度：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public void Startup()</div><div class="line">&#123;</div><div class="line">    // No need to poll, this event will notify</div><div class="line">    // when the level has been loaded.</div><div class="line">    levelLoader.LevelLoaded += levelLoader_LevelLoaded;</div><div class="line">    levelLoaded.Load(&quot;SomeLevel&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">private void levelLoader_LevelLoaded(object sender, LevelLoadedEventArgs e)</div><div class="line">&#123;</div><div class="line">    // Initialize dependent systems</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>C# event优于之前，但是代码依旧会很快变得复杂。脑补有个异步网页爬虫依赖必须在游戏启动前完成。你用C# event能浪成怎样呢？再说，随着复杂度增加，困惑变得愈加尖锐，代码也变得越来越难维护管理。</p>
+<p>抛开event，我们使用回调（异步方法），这是JS、Lua中烂大街的技术：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public void Startup()</div><div class="line">&#123;</div><div class="line">    levelLoader.Load(&quot;someLevel&quot;, loadedLevel=&gt;&#123;</div><div class="line">        // Initialize dependent systems ...</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>回调给了很多好处，它甚至可以允许实现链式加载及初始化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public void Startup()</div><div class="line">&#123;</div><div class="line">    // Load the level.</div><div class="line">    levelLoader.Load(&quot;SomeLevel&quot;, loadedLevel =&gt;</div><div class="line">    &#123;</div><div class="line">        // After level has loaded, load behaviours required by the level.</div><div class="line">        behaviorLoader.LoadBehaviors(loadedLevel.RequiredBehaviours,</div><div class="line">            loadedBehaviors =&gt;</div><div class="line">            &#123;</div><div class="line">                // Initialise dependent systems...</div><div class="line">            &#125;</div><div class="line">        );</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>回调的问题在于，它导致了深度嵌入的异步函数让人困惑。这就是大家所说的<a href="http://callbackhell.com/" target="_blank" rel="external">回调地狱</a>。</p>
+<p>这就是Promise登场的理由啦。大家需要更好的工具架构、管理复杂的异步代码。你若认同本文之前所描述的问题，promise将备受欢迎的加入你的工具包。</p>
+<p>之前所列的方法将导致代码迅速错乱交织，难以调试、测试、维护。使用Promise能够以优雅易读的方式布局链式依赖。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">levelLoader.LoadLevel(&quot;SomeLevel&quot;)</div><div class="line">    .Then(loadedLevel =&gt; LoadSometingElse(loadedLevel))</div><div class="line">    .Then(loadedLevel =&gt; LoadAnotherThing(loadedLevel)))</div><div class="line">    .Done(loadedLevel =&gt; StartGame(loadedLevel));</div></pre></td></tr></table></figure></p>
+<p>关于Promise另外的好处是：渐进式重构代码有可能转化成promise。我们深知这点是因为我们就这么做了，递进替换Unity的协程为Promise。（每步都认真测试了）</p>
+<p>这仅是promise的牛刀小试。更加深入探索它，你将明白它对你的开发过程会产生怎样的变革。</p>
+<h2 id="Promise用于组合游戏逻辑"><a href="#Promise用于组合游戏逻辑" class="headerlink" title="Promise用于组合游戏逻辑"></a>Promise用于组合游戏逻辑</h2><p>Promise具有强大的能力通过流式接口组合操作序列。我们已经通过增加组合操作扩展promise规范，用于解决游戏开发的特定问题。本节中，我们将浏览下这些新操作。<em>All</em>是组合并行操作，<em>Race</em>是第一个并行操作完成时完成，<em>Sequence</em>是调度顺序操作集合。</p>
+<h3 id="Promise-All"><a href="#Promise-All" class="headerlink" title="Promise.All"></a>Promise.All</h3><p><em>All</em>打包多个promise，它返回的promise仅在所有打包的promise都被resolve后才resolve。</p>
+<p>这可以用在很多场合。例如成就系统。想象一个益智游戏的成就需要玩家玩30分且完成10关后解锁：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">IPromise OpeningGambitAchievement()</div><div class="line">&#123;</div><div class="line">    return Promise.All(</div><div class="line">        WaitForTimeSpentOnPuzzles(60 * 20),</div><div class="line">        FinishedSpecificNumberOfLevels(10)</div><div class="line">    );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><em>WaitForTimeSpentOnPuzzles</em>和<em>FinishedSpecificNumberOfLevels</em>都会返回promise。它们内部怎么执行我们后续在谈，现在最重要的是理解<em>OpeningGambitAchievement</em>返回的promise仅在上述两个promise都resolve才会被resolve，而不管两个事件相隔多么离谱。</p>
+<p>使用这个promise，仅仅需要触发及遗忘：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">OpeningGambitAchievement()</div><div class="line">    .Done(() =&gt; ShowAchievementNotification(&quot;OpeningGambit&quot;);</div></pre></td></tr></table></figure></p>
+<p><em>All</em> 同样可传入promise集合用于resolve，例如玩家必须完成目标的集合：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">IEnumerable&lt;IPromise&gt; ObjectivesToComplete()</div><div class="line">&#123;</div><div class="line">    // ... return a collection of promises ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这样，当玩家达成目标后，可以很容易接受通知：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Promise.All(ObjectivesToComplete())</div><div class="line">    .Done(() =&gt; OnObjectivesCompleted());</div></pre></td></tr></table></figure></p>
+<p><em>All</em> 还可以通过<em>ThenAll</em>链式传入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">LoadLevel(someLevel)</div><div class="line">    .ThenAll(theLevel =&gt; ObjectivesToComplete(theLevel))</div><div class="line">    .Done(() =&gt; OnLevelCompleted());</div></pre></td></tr></table></figure></p>
+<h3 id="Promise-Race"><a href="#Promise-Race" class="headerlink" title="Promise.Race"></a>Promise.Race</h3><p><em>Race</em>和<em>All</em>很像，区别点在于它会在第一个内部promise resolve后就直接resolve。内部每个Promise都<em>Race</em>完成。这个机制很容易用于构建超时代码。</p>
+<p>想象下某个情形需要玩家提供输入，但是有一个时间限制。本例中，返回promise将在玩家输入后或超时后被resolve，先到先得：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">IPromise WaitForTimedUserInput(float timeoutSeconds)</div><div class="line">&#123;</div><div class="line">    return Promise.Race(WaitForInput(), Timeout(timeoutSeconds));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>需要警惕的是，其他内部promise依旧运行知道完成。尽管<em>Race</em> promise 会在第一个内部promise完成后立马resolve并调用链式逻辑，其他内部promise依旧会运行知道完成。所以需要小心使用promise会可能导致异步状态变更而产生副作用。</p>
+<h3 id="Promise-Sequence"><a href="#Promise-Sequence" class="headerlink" title="Promise.Sequence"></a>Promise.Sequence</h3><p>一些场景如动画动态生成移动序列能够简单使用<em>Sequence</em>函数，如下硬编码操作序列：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">PromiseOne()</div><div class="line">    .Then(PromiseTwo())</div><div class="line">    .Then(PromiseThree())</div><div class="line">    ...</div><div class="line">    .Done();</div></pre></td></tr></table></figure></p>
+<p><em>Sequence</em>可用于动态生成操作序列（可能从数据中载入），用于改善上述硬编码形式。</p>
+<p><em>Sequence</em> 输入函数集合，返回promise。每个函数仅在前一个promise resolve后调用下一个。这使得异步操作序列串行执行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">IEnumerable&lt;Func&lt;IPromise&gt;&gt; GenerateMovementSequence()</div><div class="line">&#123;</div><div class="line">    // Generate a collection of functions that each initiate an async operation</div><div class="line">    // and return a promise.</div><div class="line">&#125;</div><div class="line"></div><div class="line">Promise.Sequence(GenerateMovementSequence())</div><div class="line">    .Done(() =&gt; &#123;</div><div class="line">        // The sequence has completed.</div><div class="line">    &#125;);</div></pre></td></tr></table></figure></p>
+<p>这看上去比实际更复杂。我们需要函数集合而不是promise集合，因为我们需要延迟启动每个异步操作直到轮到它。不能仅仅传递promise结合，每个存在的promise都暗示着异步操作已经启动。换句话说，序列中的每个操作都是同步启动的，这并不是我们所要的（这是<em>All</em>所要的）。因此，<em>Sequence</em>必须传递违背调用的函数。</p>
+<p>例如，有个NPC守卫需要走一系列的路径点。当上述行为完成后NPC将复位，等待玩家的后续激发。</p>
+<p>可以用promise实现上述功能。链接<em>Then</em>，生成一个NPC在每个路径点上的移动序列。这意味着路径点需要在运行时可知。我更喜欢用数据驱动来实现，从数据中导入路径点集合。这简直是用<em>Sequence</em>的完美时刻。</p>
+<p>假定我们有个移动NPC并返回一个promise的函数，该promise在NPC到达指定点后resolve。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">IPromise MoveToPosition(Vector3 endPosition, float movementSpeed);</div></pre></td></tr></table></figure></p>
+<p>这些就够我们手工链接了。但是<em>Sequence</em>需要的是返回一个函数而不是promise，允许<em>Sequence</em>在恰当时候调用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Func&lt;IPromise&gt; PrepMoveToPosition(Vector3 endPosition, float movementSpeed)&#123;</div><div class="line">    return () =&gt; MoveToPosition(endPosition, movementSpeed);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><em>PrepMoveToPosition</em>以匿名函数包装<em>MoveToPosition</em>，返回新函数。这样就可以创建一个函数集传递给<em>Sequence</em>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Vector3[] waypoints = ... loaded from data ...</div><div class="line"></div><div class="line">void MoveAlongWaypoints(float speed)</div><div class="line">&#123;</div><div class="line">    // Generate collection of functions for moving through the way points.</div><div class="line">    var moves = waypoints.Select(waypoint =&gt; PrepMoveToPosition(waypoint, speed));</div><div class="line"></div><div class="line">    Promise.Sequence(moves)</div><div class="line">        .Done(() =&gt; Reset());</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以看出，promise不仅可以这样，还更鼓励我们分离逻辑，打破函数紧密，逻辑组件更易读，好管理。</p>
+<p><em>Sequence</em>通用可以通过<em>thenSequence</em>链接在一起。</p>
+<h2 id="Promise用于时间逻辑"><a href="#Promise用于时间逻辑" class="headerlink" title="Promise用于时间逻辑"></a>Promise用于时间逻辑</h2><p>在上述场景中使用promise有直观的好处，但是扩展使用promise到时间逻辑上时，就触碰到它的天花板了。</p>
+<p>许多游戏使用某种方式的定时器，跟踪时间在游戏开发中是不可或缺的部分。例子包括威力提升限定时间，依据时间的结束条件，竞速游戏每圈时间及最高级的是，整个过场动画是许多时间操作的序列。</p>
+<p>定时器最简单的形式就是一定时间后触发逻辑。代码中一次性解决这个简单问题，一个浮点数随着增量流逝时间变化增加。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">void Update(float deltaTime)</div><div class="line">&#123;</div><div class="line">    curTime += deltaTime;</div><div class="line"></div><div class="line">    if (curTime &lt; triggerTime)</div><div class="line">    &#123;</div><div class="line">        // Still counting towards the timer</div><div class="line">    &#125; else</div><div class="line">    &#123;</div><div class="line">        // Time is up</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这是简单的技巧，但是复杂性也随之放大。若是有很多定时器，讲很难调试及维护。</p>
+<p>考虑个更复杂的例子。</p>
+<p>假设角色可换造型，有许多外形，每种有不同的增益。角色只能从人类形态激发转换成其他形态，一旦转变后，玩家不可手动变回，只能在经过随机时间后变回。更复杂的是，每种形态玩家都能激发专属威力提升，这些提升同样有自身定时器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">class Character</div><div class="line">&#123;</div><div class="line">    float currentFormtimer; // The amount of time left in the current form.;</div><div class="line"></div><div class="line">    enum Form&#123;</div><div class="line">        Human,</div><div class="line">        Wolf,</div><div class="line">        Hawk,</div><div class="line">        Dolphin</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    Form currentForm = Form.Human;</div><div class="line">    float currentPowerupTimer;</div><div class="line"></div><div class="line">    enum Powerup&#123;</div><div class="line">        None,</div><div class="line">        Werewolf,</div><div class="line">        HawkSpeed,</div><div class="line">        DolphinEcho</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    Powerup currentPowerup = Powerup.None;</div><div class="line"></div><div class="line">    public void Update(float deltaTime)</div><div class="line">    &#123;</div><div class="line">        if (currentForm != Form.Human)&#123;</div><div class="line">            currentFormTime -= deltaTime;</div><div class="line"></div><div class="line">            if(currentFormTimer &lt; 0f)&#123;</div><div class="line">                currentForm = Form.Human;</div><div class="line">                currentPowerup = Powerup.None;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            if (currentPowerup != Powerup.None)&#123;</div><div class="line">                currentPowerupTimer -= deltaTime;</div><div class="line">                if (currentPowerupTimer &lt;= 0f)&#123;</div><div class="line">                    currentPowerup = Powerup.None;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个例子依旧很简单，但容易变得很复杂，并且代码很难看且不好阅读。你可以想象当我们添加更多特性及定时器后，代码会长残成啥样。</p>
+<p>我们同样扩展了promise库，用于提升使用定时器。这样让我们把游戏逻辑从<em>Updata</em>函数中移出，成独立函数，每个都有<a href="http://en.wikipedia.org/wiki/Single_responsibility_principle" target="_blank" rel="external">清晰定义的职责</a></p>
+<p>我们实现了<em>PromiseTimer</em>，它消除了promise和定时器间的间隙。<em>WaitFor</em>函数返回promise，它会在经过特定时间后resolve。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">PromiseTimer promiseTimer = new PromiseTimer();</div><div class="line">promiseTimer.WaitFor(timeToWait)</div><div class="line">    .Done(() =&gt; &#123;</div><div class="line">        // Time is up</div><div class="line">    &#125;);</div></pre></td></tr></table></figure></p>
+<p>定义同类中的便捷函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">PromiseTimer promiseTimer = new PromiseTimer();</div><div class="line"></div><div class="line">IPromise WaitFor(float timeToWait)</div><div class="line">&#123;</div><div class="line">    return promiseTimer.WaitFor(timeToWait);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>定时器必须在某个位置被更新，我们可以在<em>Character</em>类中做：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">void Update(float deltaTime)</div><div class="line">&#123;</div><div class="line">    promiseTimer.Update(deltaTime);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>现在用<em>WaitFor</em>重写下<em>Character</em>例子。还记得<em>Update</em>中的逻辑代码吗，现在把他移动到恰当的帮助函数中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">class Character</div><div class="line">&#123;</div><div class="line">    PromiseTimer promiseTimer = new PromiseTimer();</div><div class="line">    enum Form&#123;</div><div class="line">        Human,</div><div class="line">        Wolf,</div><div class="line">        Hawk,</div><div class="line">        Dolphin</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    Form currentForm = Form.Human;</div><div class="line"></div><div class="line">    enum Powerup</div><div class="line">    &#123;</div><div class="line">        None,</div><div class="line">        Werewolf,</div><div class="line">        HawkSpeed,</div><div class="line">        DolphinEcho</div><div class="line">    &#125;</div><div class="line">    Powerup currentPowerup = Powerup.None;</div><div class="line"></div><div class="line">    public void Update(float deltaTime)</div><div class="line">    &#123;</div><div class="line">        promiseTimer.Update(deltaTime);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // Activates wolf mode if possible</div><div class="line">    public IPromise BeWolf()</div><div class="line">    &#123;</div><div class="line">        if(currentForm != Form.Huma)</div><div class="line">        &#123;</div><div class="line">            return Promise.Resolved()</div><div class="line">        &#125;</div><div class="line">        // Wait for a random time between 10 an 20 seconds</div><div class="line">        return RunTimer(Random.Range(10f, 20f))</div><div class="line">            .Then(()=&gt;currentForm = Form.Human);</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line"></div><div class="line">    // Activate power-up.</div><div class="line">    public IPromise ActivateWerewolfPowerup()</div><div class="line">    &#123;</div><div class="line">        if (currentForm != Form.Wolf || currentPowerup == Powerup.Werewolf)</div><div class="line">        &#123;</div><div class="line">            return Promise.Resolved();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        currentPowerup = Powerup.Werewolf;</div><div class="line"></div><div class="line">        return promiseTimer.WaitFor(Random.Range(1f, 5f))</div><div class="line">            .Then(() =&gt; currentPowerup = Powerup.Werewolf);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这样，所有的定时器逻辑将有<em>PromiseTimer</em>有条理的处理。</p>
+<p>你可能注意到上述变形代码的小问题！难道狼力提升可以在狼形态到时后依旧激活？ 我们可以简单的扩展条件门控promise来解决。</p>
+<h2 id="Promise用于条件门控"><a href="#Promise用于条件门控" class="headerlink" title="Promise用于条件门控"></a>Promise用于条件门控</h2><p>你可能注意到<em>All</em>、<em>Race</em>、<em>Sequence</em>类似于标准编程结构 <em>and</em>、<em>or</em>、<em>for</em>。按这个思路来想，有利于帮助理解用它应用于构造条件门控及行为。</p>
+<p><em>PromiseTimer</em>基于时间条件扩展了 <em>WaitUntil</em>和<em>WaitWhile</em>操作。</p>
+<p><em>WaitUntil</em> 返回promise, 它将在未来某个时刻达成判断条件后被resolved。这个条件可以是限时，这样就和<em>WaitFor</em>一致了，亦可以是任何返回布尔值结果的表达式。</p>
+<p>上节中提到的威力提升函数中的逻辑错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">IPromise ActivateWerewolfPowerup()</div><div class="line">&#123;</div><div class="line">    if (currentForm != Form.Wolf)</div><div class="line">    &#123;</div><div class="line">        return Promise.Resolved();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return promiseTimer.WaitFor(Random.Range(1f, 5f));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>若是在激发<em>WaitFor</em>却未完成前，<em>currentForm</em> 已改变，这意味着玩家已经变回人类形态，但是依旧有狼力提升，直到超时。假设角色不再变狼，该函数可以用<em>WaitUntil</em>修正：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">IPromise ActivateWerewolfPromiseup()</div><div class="line">&#123;</div><div class="line">    var poweruptime = Random.Range(1f, 5f);</div><div class="line">    return promiseTimer.WaitUntil( t=&gt; &#123;</div><div class="line">        return t.elapsedTime &gt;= powerupTime || currentForm != Form.Wolf</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这里，promise仅在超时后resolve一次，或者玩家不再是狼了，无论二者谁先触发。</p>
+<p>早先讨论<code>Promise.All</code>的时候，用两个promise来检测达成目标成就。可以用<em>PromiseTimer</em>改善：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">IPromise WaitForTimeSpentOnPUzzles(float seconds)</div><div class="line">&#123;</div><div class="line">    return promiseTimer.WaitUntil(timeData =&gt; &#123;</div><div class="line">        var timePlaying = 0f;</div><div class="line">        if(!paused)</div><div class="line">            timePlaying += timeData.deltaTime;</div><div class="line"></div><div class="line">        return timePlaying &gt;= seconds;</div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">IPromise FinishedSpecificNumberOfLevels(int levelCount)</div><div class="line">&#123;</div><div class="line">    return promiseTimer.WaitUntil(_ =&gt; levelsCompleted &gt;= levelCount);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>使用<em>WaitUntil</em> 能够快速简单的搭建复杂可维护系统。例如，假设刚才的变形游戏有一个奇怪的成就系统。有一个成就这么说：周二使用海豚形态完成关卡，剩余一秒。可以想象这多么难编代码。尤其是有150+多个类似成就。我们能够使用<em>WaitUtil</em>去监控复杂条件集及动态响应：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">class LevelManager</div><div class="line">&#123;</div><div class="line">    DateTime timeOfLevelStart;</div><div class="line"></div><div class="line">    Character character;</div><div class="line">    float curTimeRemaining; // The amount of time left on the clock</div><div class="line">    float totalLevelTime = 60f; // 1 minute to finish the level.</div><div class="line">    PromiseTimer promiseTimer = new PromiseTimer();</div><div class="line"></div><div class="line">    public LevelManager()</div><div class="line">    &#123;</div><div class="line">        timeOfLevelStart = DateTime.Now();</div><div class="line">        curTimeRemaining = totalLevelTime;</div><div class="line"></div><div class="line">        // Timer for the level,</div><div class="line">        // this time counting down so we can catch that last second</div><div class="line">        promiseTimer.WaitUntil(timeData =&gt;</div><div class="line">            &#123;</div><div class="line">                curTimeRemaining = totalLevelTime - timeData.elapsedTime;</div><div class="line">                return curTimeRemaining &lt;= 0;</div><div class="line">            &#125;)</div><div class="line">            .Done();</div><div class="line"></div><div class="line">        promiseTimer.WaitUntil(_ =&gt;</div><div class="line">            &#123;</div><div class="line">                return</div><div class="line">                    timeOfLevelStart.DayOfTheWeek == DayOfTheWeek.Tuesday &amp;&amp;</div><div class="line">                    character.IsInDolphinMode &amp;&amp;</div><div class="line">                    curTimeRemaining &lt;= 1f &amp;&amp;</div><div class="line">                    curTimeRemaining &gt; 0f;</div><div class="line">            &#125;)</div><div class="line">            .Then(() =&gt; ShowAchievementNotification(&quot;NailedItOnDolphinDay&quot;))</div><div class="line">            .Done();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="嵌套Promise"><a href="#嵌套Promise" class="headerlink" title="嵌套Promise"></a>嵌套Promise</h2><p>我们已经见识过promise嵌套promise。现在更进一步来使用它。</p>
+<p>假设开发的游戏需要新手指引功能。指引有一些动作，然后暂停等玩家交互后才可继续。我们可以以一个小promise构造大promis<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">IPromise MoveCamera(Vector3 endPosition, float durationSeconds)</div><div class="line">&#123;</div><div class="line">    var startPosition = camera.CurPosition;</div><div class="line">    return promiseTimer.WaitUntil(timeData =&gt;</div><div class="line">        &#123;</div><div class="line">            camera.CurPosition = Vector3.Lerp(</div><div class="line">                startPosition,</div><div class="line">                endPosition,</div><div class="line">                timeData.elapsedTime / durationSeconds</div><div class="line">            );</div><div class="line"></div><div class="line">            return IsPositionCloseEnough(camera.CurPosition, endPosition);</div><div class="line">        &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>上述代码没有新知识点。现在写个等待玩家输入的函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">IPromise WaitForKeyInput(KeyCode key)</div><div class="line">&#123;</div><div class="line">    return promiseTimer.WaitUntil(_ =&gt; InputManager.GetKey(key));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>接下来序列文本信息，允许等待玩家按空格键显示下一条消息。最后显示的文本序列并不明显需要布尔值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Func&lt;IPromise&gt; PrepTextBoxesForStage(string text, bool waitForInput)</div><div class="line">&#123;</div><div class="line">    return () =&gt;</div><div class="line">    &#123;</div><div class="line">        TextBox.Text = text;</div><div class="line">        TextBox.Show(); // Sets up the text and displays it on screen.</div><div class="line">        if (waitForInput)</div><div class="line">        &#123;</div><div class="line">            return WaitForKeyInput(KeyCode.Space);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return Promise.Resolved();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>现在构建指引序列。移动摄像机到特定位置，显示消息，等待输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">Func&lt;IPromise&gt; PrepTutorialStage(</div><div class="line">    Vector3 cameraPosition,</div><div class="line">    string[] texts,</div><div class="line">    KeyCode key</div><div class="line">)</div><div class="line">&#123;</div><div class="line">    // If the index is the last one in the array,</div><div class="line">    // then we don&apos;t want to wait for the user&apos;s input</div><div class="line">    var textBoxes = texts.Select(</div><div class="line">        (text, index) =&gt;</div><div class="line">            PrepTextBoxesForStage(text, index != texts.length - 1)</div><div class="line">    );</div><div class="line">    return () =&gt;</div><div class="line">    &#123;</div><div class="line">        return MoveCamera(cameraPosition, 2f)</div><div class="line">            .ThenSequence(() =&gt; textBoxes)</div><div class="line">            .Then(() =&gt; WaitForKeyInput(key));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>接下来，假设数据库或表格中有各种阶段的描述，其可以导入成<em>TutorialStage</em>结构：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">struct TutorialStage</div><div class="line">&#123;</div><div class="line">    public Vector3 Position;</div><div class="line">    public string[] Texts;</div><div class="line">    public KeyCode key;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>把这些都放在一个小函数中，它返回一个promise，它直到指引完成才被resolve:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">IPromise RunTutorial(IEnumerable&lt;TutorialStage&gt; tutorialData)</div><div class="line">&#123;</div><div class="line">    var tutorialStages = tutorialData</div><div class="line">        .Select(data =&gt;</div><div class="line">            PrepTutorialStage(data.Position, data.Texts, data.key)</div><div class="line">        );</div><div class="line"></div><div class="line">    return Promise.Sequence(tutorialStages);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>唷， 我们有指引步骤的序列，自定义上下文，能够等待玩家输入，数据驱动并且每个环节都分离独立。可以在<a href="https://github.com/adamsingle/PromisesUnityDemo" target="_blank" rel="external">github</a>上看相应DEMO。</p>
+<h2 id="Promise对比Unity协程"><a href="#Promise对比Unity协程" class="headerlink" title="Promise对比Unity协程"></a>Promise对比Unity协程</h2><p>Promise可替代Unity的协程。协程有其用武之地但我更喜欢promise。若你曾在任意难度下使用协程，会发现理解它会迅速变难，代码同样也会更复杂。</p>
+<p>Unity的协程是由C#的迭代器创建的。Unity控制它，运行协程其实是返回一个迭代器。Unity然后一步一步的执行迭代器，每次调用<code>yield</code> 我们都将控制权交回给了Unity。接着Unity又一步步执行迭代器，知道又一次yield或最终返回。</p>
+<p>Promse来自JS，JS并没有协程机制，尽管ES6支持了生成器，人们已经讨论如何在JS中应用协程，pros和cons将实现这一点。协程这么看来，毁誉参半。</p>
+<p>当然，我们相信使用promse会比协程有更好的表达性及可维护的代码。</p>
+<p>然而，协程有一个主要优势：代码流程更易读。这在线性序列代码下更易调试。阅读代码流程更频繁需要使用 <em>yield</em>、<em>return</em>，而不是<em>Then</em>、<em>ThenAll</em>等promise API。在短线性序列代码下，协程更易读及调试。</p>
+<p>小协程很难扩展组合成大协程。嵌套协程难于管理，你可以这么做但是一开始肯定很难实现。尽管如此，多试几次没准可以。换而言之，promise能够以各种姿势诞生大逻辑序列。这种<a href="https://en.wikipedia.org/wiki/Composability" target="_blank" rel="external">组件模式</a>结果让代码更可<a href="http://en.wikipedia.org/wiki/Reusability" target="_blank" rel="external">复用</a>。你可以以高阶返回promise函数作为结束，用于编写共用逻辑去组件新行为、新且不同的游戏逻辑。重写重构promise不值一提，增加了你快速实验的能力，它是让你更具生产力，同时探索调整游戏乐趣所不可缺少的。</p>
+<p>协程的另外一个问题就是缺乏控制，尽管你有它们。Unity自动运行协程，你对协程没有控制，他们如何前进，你对他在特定点的行为没有具体概念。这也是协程难调试的原因之一。这算是你理解代码的灾难吧。你能控制的，就是yield下，或停止协程。</p>
+<p>停止一个协程同样有问题。我们仅能通过<a href="http://en.wikipedia.org/wiki/Magic_string" target="_blank" rel="external">魔术字符串</a>停止指定名字的协程。这影响了代码中的类型安全及打断了VS的自动重构工具使用。一个或一组promise可以很容易地通过<em>PromiseTimer</em>中断，且不需要任何魔术字符串。</p>
+<p><em>PromiseTimer</em> 把控制权交给我们。我们能够按照我们的意愿更新promise，甚至打印当前运行的promise列表。可以用多个<em>PromiseTimer</em>以不同形式去控制不同的多组promise。例如可以暂停某一组，其他组继续运行。</p>
+<p>那协程的最大问题在哪呢？他只能在MonoBehaviour中使用！若是你的代码和Unity紧密耦合，那你的代码不可脱逃它运行。这严重限制了代码复用及测试驱动开发。若是你不懂这些，可能对你也没多大问题，继续用协程就是啦。</p>
+<h2 id="就是某种形式的行为树？"><a href="#就是某种形式的行为树？" class="headerlink" title="就是某种形式的行为树？"></a>就是某种形式的行为树？</h2><p>当我们使用promise，并拓展它用于游戏开发，是否觉得重新造了<a href="http://en.wikipedia.org/wiki/Behavior_Trees_(artificial_intelligence,_robotics_and_control" target="_blank" rel="external">行为树</a>)的轮子。</p>
+<p>我们并不是在构建AI（这是行为树要做的）。我们是构建交互游戏行为。序列化声音、动画、用户交互等等。序列化关卡流，并评估进行下一关的条件。</p>
+<p>promise和行为树有一些重合的功能。</p>
+<p>在promise的扩展API中，我们使用<code>All</code>等操作并行执行异步代码。这和行为树的<a href="http://aigamedev.com/open/article/parallel/" target="_blank" rel="external">并行节点</a>相类似，同样的还有<a href="http://aigamedev.com/open/article/sequence/" target="_blank" rel="external">Sequence</a>。</p>
+<p>promise可以层次嵌套，意思说父promise可以在子promise resolve后resovle。行为树同样可以层次嵌套，它们是颗<a href="http://en.wikipedia.org/wiki/Tree_(data_structure" target="_blank" rel="external">树</a>)，<a href="http://en.wikipedia.org/wiki/Recursion_(computer_science" target="_blank" rel="external">递归</a>)数据结构。</p>
+<p>行为树的<a href="http://aigamedev.com/open/article/selector/" target="_blank" rel="external">选择节点</a>，这在promise中没有对应API，这并不是因为很难添加而是没必要。</p>
+<p>当考虑到promise的局限后，你可能会考虑使用行为树，他们比promise功能更全。</p>
+<p>行为树是典型的数据驱动，由游戏策划通过编辑器构建。这允许非编程人员能够直接构建，调整，平衡，是一种理想的方式构建游戏逻辑及AI。对于独立开发者而言，可能没有使用行为树编辑器的选项，甚至都没有专门的游戏策划，因为开发者常常同时也是策划。在这种情形下，代码驱动的游戏AI效果更好。我们已经推动promise到此地步，也有好结果。然而我们可以想象行为树若有代码驱动的流式API，那么在某些情形下更适合我们。</p>
+<p>行为树更容易控制，它们被设计成可暂停，停止，重启等。promise并没有设计成这样，尽管我们可以暂停或停止一个基于时间的promise（<em>PromiseTimer</em>），然而，若不是不能停止一个异步操作的中间过程，例如等待网络交易结果，promise有些困难。这并不是说promise不能通过变通手段解决问题，而是你深入promise涉及到这些问题，你可能重新考虑使用行为树。这里说的是，用promise在他适合的领域，用行为树在promise难以企及的领域。</p>
+<p>依赖情景的行为树同样更加容易调试。如果你有奢侈的行为树编辑器，你很有可能也有一些可视化的行为树调试器。这很好，但并不适合在真实代码调试器中调试。调试promise挺难的，但至少可以在调试器中去做。我们可以想象我们神奇的行为树流式API能够比promise API更好调试。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>尽管本文描述了我们使用promise进行游戏开发的经历。任何高级技术都有它的利弊，我们必须了解，理解风险并作出良性决策，哪些技术可以用在游戏开发中。</p>
+<p>开发中引入了错误的技巧或技术可能导致悲剧。每件事都有其自身土壤，但是错误的应用会对你的生产产生副作用，所有要注意，保留一个备选项当特定技术不能满足你。</p>
+<p>确保你有计划时间去学习。你不能匆匆上手并期望直接有个好用。你需要理解哪些情形是有用的，理解如何应变并减轻潜在隐患。</p>
+<p>希望这些没吓到你！ 我们只是确认你意识到你已经上路了。希望这篇介绍promise的文章能够帮助你探索promise。注意到任何高级技术可能是一个黑洞哦。</p>
+<p>我们的C#版promise可以在<a href="https://github.com/Real-Serious-Games/c-sharp-promise" target="_blank" rel="external">github</a>上找到。</p>
+<p>例子也可以在<a href="https://github.com/adamsingle/PromisesUnityDemo" target="_blank" rel="external">github</a>上找到</p>
+<p>致谢<br>Ash and Adam</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2016/08/05/Promises for Game Development/" data-title="Sheldon的世界" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/05/Using promises for Unity async operations/" title="">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  (no title)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/05/hello-world/"  title="Hello World">
+ <strong>NEXT:</strong><br/> 
+ <span>Hello World
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#使用Promise进行游戏开发"><span class="toc-number">1.</span> <span class="toc-text">使用Promise进行游戏开发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.2.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍promise"><span class="toc-number">1.3.</span> <span class="toc-text">介绍promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Promise进行游戏开发-1"><span class="toc-number">1.4.</span> <span class="toc-text">使用Promise进行游戏开发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise对C-的帮助"><span class="toc-number">1.5.</span> <span class="toc-text">Promise对C#的帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise-对游戏开发的帮助"><span class="toc-number">1.6.</span> <span class="toc-text">Promise 对游戏开发的帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于异步资源载入"><span class="toc-number">1.7.</span> <span class="toc-text">Promise用于异步资源载入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于组合游戏逻辑"><span class="toc-number">1.8.</span> <span class="toc-text">Promise用于组合游戏逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-All"><span class="toc-number">1.8.1.</span> <span class="toc-text">Promise.All</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-Race"><span class="toc-number">1.8.2.</span> <span class="toc-text">Promise.Race</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-Sequence"><span class="toc-number">1.8.3.</span> <span class="toc-text">Promise.Sequence</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于时间逻辑"><span class="toc-number">1.9.</span> <span class="toc-text">Promise用于时间逻辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于条件门控"><span class="toc-number">1.10.</span> <span class="toc-text">Promise用于条件门控</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#嵌套Promise"><span class="toc-number">1.11.</span> <span class="toc-text">嵌套Promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise对比Unity协程"><span class="toc-number">1.12.</span> <span class="toc-text">Promise对比Unity协程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#就是某种形式的行为树？"><span class="toc-number">1.13.</span> <span class="toc-text">就是某种形式的行为树？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">1.14.</span> <span class="toc-text">结论</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://yoursite.com" target="_blank" title="Sheldon">Sheldon</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>
