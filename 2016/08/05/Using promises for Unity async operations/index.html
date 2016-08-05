@@ -4,14 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Sheldon的世界</title>
+    <title>promise应用于Unity异步操作 | Sheldon的世界</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Sheldon">
     
-    <meta name="description" content="promise应用于Unity异步操作本文翻译自Using promises for Unity async operations，by Ashley Davis
+    <meta name="description" content="本文翻译自Using promises for Unity async operations，by Ashley Davis
 你是否很难理解如何在Unity中使用promises? 本文将通过例子阐述，如何用promises表示Unity的通用异步操作
-之前我写">
+之前我写过使用promise进行游戏开发。那篇">
     
     
     
@@ -38,7 +38,7 @@
 				<h1 class="site-name"><a href="/" title="Sheldon的世界">Sheldon的世界</a></h1>
 				<h2 class="blog-motto">Keep Calm and Carry On</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -51,7 +51,7 @@
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:yoursite.com">
 					</form>
 					
@@ -67,7 +67,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/08/05/Using promises for Unity async operations/" title="" itemprop="url"></a>
+      <a href="/2016/08/05/Using promises for Unity async operations/" title="promise应用于Unity异步操作" itemprop="url">promise应用于Unity异步操作</a>
   </h1>
   <p class="article-author">By
     
@@ -75,7 +75,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-08-05T20:37:06.269Z" itemprop="datePublished">2016-08-05</time>
-    Updated:<time datetime="2016-08-03T18:05:51.567Z" itemprop="dateModified">2016-08-03</time>
+    更新日期:<time datetime="2016-08-05T20:42:04.248Z" itemprop="dateModified">2016-08-05</time>
     
   </p>
 </header>
@@ -83,11 +83,11 @@
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#promise应用于Unity异步操作"><span class="toc-number">1.</span> <span class="toc-text">promise应用于Unity异步操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.1.</span> <span class="toc-text">目录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#开发环境"><span class="toc-number">1.1.1.</span> <span class="toc-text">开发环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为何使用异步操作"><span class="toc-number">1.1.2.</span> <span class="toc-text">为何使用异步操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#介绍Unity异步操作"><span class="toc-number">1.1.3.</span> <span class="toc-text">介绍Unity异步操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为何使用promise"><span class="toc-number">1.1.4.</span> <span class="toc-text">为何使用promise</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#协程作为promise的例子"><span class="toc-number">1.1.5.</span> <span class="toc-text">协程作为promise的例子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-协程作为promise的基本模板"><span class="toc-number">1.1.5.1.</span> <span class="toc-text">1. 协程作为promise的基本模板</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-协程完成后获取结果"><span class="toc-number">1.1.5.2.</span> <span class="toc-text">2. 协程完成后获取结果</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-使用WWW进行Http-GET请求作为promise"><span class="toc-number">1.1.5.3.</span> <span class="toc-text">3. 使用WWW进行Http GET请求作为promise</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-GameObject-MonoBehavior的单例形式"><span class="toc-number">1.1.5.4.</span> <span class="toc-text">4. GameObject/MonoBehavior的单例形式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-异步加载场景"><span class="toc-number">1.1.5.5.</span> <span class="toc-text">5. 异步加载场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-异步加载bundle"><span class="toc-number">1.1.5.6.</span> <span class="toc-text">6. 异步加载bundle</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-组合例子"><span class="toc-number">1.1.5.7.</span> <span class="toc-text">7. 组合例子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-硬编码实现合并多场景"><span class="toc-number">1.1.5.8.</span> <span class="toc-text">8. 硬编码实现合并多场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-动态实现合并多场景"><span class="toc-number">1.1.5.9.</span> <span class="toc-text">9. 动态实现合并多场景</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结论"><span class="toc-number">1.1.6.</span> <span class="toc-text">结论</span></a></li></ol></li></ol></li></ol>
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#开发环境"><span class="toc-number">1.1.</span> <span class="toc-text">开发环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为何使用异步操作"><span class="toc-number">1.2.</span> <span class="toc-text">为何使用异步操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#介绍Unity异步操作"><span class="toc-number">1.3.</span> <span class="toc-text">介绍Unity异步操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为何使用promise"><span class="toc-number">1.4.</span> <span class="toc-text">为何使用promise</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#协程作为promise的例子"><span class="toc-number">1.5.</span> <span class="toc-text">协程作为promise的例子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-协程作为promise的基本模板"><span class="toc-number">1.5.1.</span> <span class="toc-text">1. 协程作为promise的基本模板</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-协程完成后获取结果"><span class="toc-number">1.5.2.</span> <span class="toc-text">2. 协程完成后获取结果</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-使用WWW进行Http-GET请求作为promise"><span class="toc-number">1.5.3.</span> <span class="toc-text">3. 使用WWW进行Http GET请求作为promise</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-GameObject-MonoBehavior的单例形式"><span class="toc-number">1.5.4.</span> <span class="toc-text">4. GameObject/MonoBehavior的单例形式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-异步加载场景"><span class="toc-number">1.5.5.</span> <span class="toc-text">5. 异步加载场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-异步加载bundle"><span class="toc-number">1.5.6.</span> <span class="toc-text">6. 异步加载bundle</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-组合例子"><span class="toc-number">1.5.7.</span> <span class="toc-text">7. 组合例子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-硬编码实现合并多场景"><span class="toc-number">1.5.8.</span> <span class="toc-text">8. 硬编码实现合并多场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-动态实现合并多场景"><span class="toc-number">1.5.9.</span> <span class="toc-text">9. 动态实现合并多场景</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结论"><span class="toc-number">1.6.</span> <span class="toc-text">结论</span></a></li></ol></li></ol>
 		</div>
 		
-		<h1 id="promise应用于Unity异步操作"><a href="#promise应用于Unity异步操作" class="headerlink" title="promise应用于Unity异步操作"></a>promise应用于Unity异步操作</h1><p>本文翻译自<a href="http://www.what-could-possibly-go-wrong.com/using-promises-for-unity-async-operations/" target="_blank" rel="external">Using promises for Unity async operations</a>，by <a href="http://www.what-could-possibly-go-wrong.com/author/ash/" target="_blank" rel="external">Ashley Davis</a></p>
+		<p>本文翻译自<a href="http://www.what-could-possibly-go-wrong.com/using-promises-for-unity-async-operations/" target="_blank" rel="external">Using promises for Unity async operations</a>，by <a href="http://www.what-could-possibly-go-wrong.com/author/ash/" target="_blank" rel="external">Ashley Davis</a></p>
 <p>你是否很难理解如何在Unity中使用<a href="https://en.wikipedia.org/wiki/Futures_and_promises" target="_blank" rel="external">promises</a>? 本文将通过例子阐述，如何用promises表示Unity的通用异步操作</p>
 <p>之前我写过<a href="http://www.what-could-possibly-go-wrong.com/promises-for-game-development/" target="_blank" rel="external">使用promise进行游戏开发</a>。那篇文章涉及到使用promise的背景、理论及优势，并笼统的介绍如何应用promise进行游戏开发。</p>
 <p>本文中，我将降一些档次并提供简单而实用的unity使用promise的例子。</p>
@@ -190,11 +190,16 @@
 		<footer class="article-footer clearfix">
 
 
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/翻译/">翻译</a>
+</div>
+
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2016/08/05/Using promises for Unity async operations/" data-title="Sheldon的世界" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2016/08/05/Using promises for Unity async operations/" data-title="promise应用于Unity异步操作 | Sheldon的世界" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -204,18 +209,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/08/05/Fluent behavior trees for AI and game-logic/" title="">
+ <a href="/2016/08/05/Fluent behavior trees for AI and game-logic/" title="流式行为树用于AI和游戏逻辑">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  (no title)</span>
+  流式行为树用于AI和游戏逻辑</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2016/08/05/Promises for Game Development/"  title="">
+<a href="/2016/08/05/Promises for Game Development/"  title="使用Promise进行游戏开发">
  <strong>NEXT:</strong><br/> 
- <span>(no title)
+ <span>使用Promise进行游戏开发
 </span>
 </a>
 </div>
@@ -224,23 +229,32 @@
 
 	
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#promise应用于Unity异步操作"><span class="toc-number">1.</span> <span class="toc-text">promise应用于Unity异步操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.1.</span> <span class="toc-text">目录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#开发环境"><span class="toc-number">1.1.1.</span> <span class="toc-text">开发环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为何使用异步操作"><span class="toc-number">1.1.2.</span> <span class="toc-text">为何使用异步操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#介绍Unity异步操作"><span class="toc-number">1.1.3.</span> <span class="toc-text">介绍Unity异步操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为何使用promise"><span class="toc-number">1.1.4.</span> <span class="toc-text">为何使用promise</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#协程作为promise的例子"><span class="toc-number">1.1.5.</span> <span class="toc-text">协程作为promise的例子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-协程作为promise的基本模板"><span class="toc-number">1.1.5.1.</span> <span class="toc-text">1. 协程作为promise的基本模板</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-协程完成后获取结果"><span class="toc-number">1.1.5.2.</span> <span class="toc-text">2. 协程完成后获取结果</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-使用WWW进行Http-GET请求作为promise"><span class="toc-number">1.1.5.3.</span> <span class="toc-text">3. 使用WWW进行Http GET请求作为promise</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-GameObject-MonoBehavior的单例形式"><span class="toc-number">1.1.5.4.</span> <span class="toc-text">4. GameObject/MonoBehavior的单例形式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-异步加载场景"><span class="toc-number">1.1.5.5.</span> <span class="toc-text">5. 异步加载场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-异步加载bundle"><span class="toc-number">1.1.5.6.</span> <span class="toc-text">6. 异步加载bundle</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-组合例子"><span class="toc-number">1.1.5.7.</span> <span class="toc-text">7. 组合例子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-硬编码实现合并多场景"><span class="toc-number">1.1.5.8.</span> <span class="toc-text">8. 硬编码实现合并多场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-动态实现合并多场景"><span class="toc-number">1.1.5.9.</span> <span class="toc-text">9. 动态实现合并多场景</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结论"><span class="toc-number">1.1.6.</span> <span class="toc-text">结论</span></a></li></ol></li></ol></li></ol>
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#开发环境"><span class="toc-number">1.1.</span> <span class="toc-text">开发环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为何使用异步操作"><span class="toc-number">1.2.</span> <span class="toc-text">为何使用异步操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#介绍Unity异步操作"><span class="toc-number">1.3.</span> <span class="toc-text">介绍Unity异步操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为何使用promise"><span class="toc-number">1.4.</span> <span class="toc-text">为何使用promise</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#协程作为promise的例子"><span class="toc-number">1.5.</span> <span class="toc-text">协程作为promise的例子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-协程作为promise的基本模板"><span class="toc-number">1.5.1.</span> <span class="toc-text">1. 协程作为promise的基本模板</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-协程完成后获取结果"><span class="toc-number">1.5.2.</span> <span class="toc-text">2. 协程完成后获取结果</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-使用WWW进行Http-GET请求作为promise"><span class="toc-number">1.5.3.</span> <span class="toc-text">3. 使用WWW进行Http GET请求作为promise</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-GameObject-MonoBehavior的单例形式"><span class="toc-number">1.5.4.</span> <span class="toc-text">4. GameObject/MonoBehavior的单例形式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-异步加载场景"><span class="toc-number">1.5.5.</span> <span class="toc-text">5. 异步加载场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-异步加载bundle"><span class="toc-number">1.5.6.</span> <span class="toc-text">6. 异步加载bundle</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-组合例子"><span class="toc-number">1.5.7.</span> <span class="toc-text">7. 组合例子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-硬编码实现合并多场景"><span class="toc-number">1.5.8.</span> <span class="toc-text">8. 硬编码实现合并多场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-动态实现合并多场景"><span class="toc-number">1.5.9.</span> <span class="toc-text">9. 动态实现合并多场景</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结论"><span class="toc-number">1.6.</span> <span class="toc-text">结论</span></a></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/翻译/" title="翻译">翻译<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
 
   
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS</a>
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
 </aside>

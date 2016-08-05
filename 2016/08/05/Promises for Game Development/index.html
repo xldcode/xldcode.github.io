@@ -4,14 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Sheldon的世界</title>
+    <title>使用Promise进行游戏开发 | Sheldon的世界</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Sheldon">
     
-    <meta name="description" content="使用Promise进行游戏开发本文翻译自Promises for Game Development, by Ashley Davis 和 Adam Single
+    <meta name="description" content="本文翻译自Promises for Game Development, by Ashley Davis 和 Adam Single
 引言本文中，我将分享使用Promise进行游戏开发的经验。旨在揭示为什么promise能有提升游戏开发进程。
-本文不面向初学者。读者需要初">
+本文不面向初学者。读者需要初级至中级以上的C#水平。本文将">
     
     
     
@@ -38,7 +38,7 @@
 				<h1 class="site-name"><a href="/" title="Sheldon的世界">Sheldon的世界</a></h1>
 				<h2 class="blog-motto">Keep Calm and Carry On</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -51,7 +51,7 @@
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:yoursite.com">
 					</form>
 					
@@ -67,7 +67,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/08/05/Promises for Game Development/" title="" itemprop="url"></a>
+      <a href="/2016/08/05/Promises for Game Development/" title="使用Promise进行游戏开发" itemprop="url">使用Promise进行游戏开发</a>
   </h1>
   <p class="article-author">By
     
@@ -75,7 +75,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-08-05T20:37:06.269Z" itemprop="datePublished">2016-08-05</time>
-    Updated:<time datetime="2016-08-05T02:03:05.989Z" itemprop="dateModified">2016-08-04</time>
+    更新日期:<time datetime="2016-08-05T20:41:44.669Z" itemprop="dateModified">2016-08-05</time>
     
   </p>
 </header>
@@ -83,11 +83,11 @@
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#使用Promise进行游戏开发"><span class="toc-number">1.</span> <span class="toc-text">使用Promise进行游戏开发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.2.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍promise"><span class="toc-number">1.3.</span> <span class="toc-text">介绍promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Promise进行游戏开发-1"><span class="toc-number">1.4.</span> <span class="toc-text">使用Promise进行游戏开发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise对C-的帮助"><span class="toc-number">1.5.</span> <span class="toc-text">Promise对C#的帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise-对游戏开发的帮助"><span class="toc-number">1.6.</span> <span class="toc-text">Promise 对游戏开发的帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于异步资源载入"><span class="toc-number">1.7.</span> <span class="toc-text">Promise用于异步资源载入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于组合游戏逻辑"><span class="toc-number">1.8.</span> <span class="toc-text">Promise用于组合游戏逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-All"><span class="toc-number">1.8.1.</span> <span class="toc-text">Promise.All</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-Race"><span class="toc-number">1.8.2.</span> <span class="toc-text">Promise.Race</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-Sequence"><span class="toc-number">1.8.3.</span> <span class="toc-text">Promise.Sequence</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于时间逻辑"><span class="toc-number">1.9.</span> <span class="toc-text">Promise用于时间逻辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于条件门控"><span class="toc-number">1.10.</span> <span class="toc-text">Promise用于条件门控</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#嵌套Promise"><span class="toc-number">1.11.</span> <span class="toc-text">嵌套Promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise对比Unity协程"><span class="toc-number">1.12.</span> <span class="toc-text">Promise对比Unity协程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#就是某种形式的行为树？"><span class="toc-number">1.13.</span> <span class="toc-text">就是某种形式的行为树？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">1.14.</span> <span class="toc-text">结论</span></a></li></ol></li></ol>
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">2.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍promise"><span class="toc-number">3.</span> <span class="toc-text">介绍promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Promise进行游戏开发"><span class="toc-number">4.</span> <span class="toc-text">使用Promise进行游戏开发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise对C-的帮助"><span class="toc-number">5.</span> <span class="toc-text">Promise对C#的帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise-对游戏开发的帮助"><span class="toc-number">6.</span> <span class="toc-text">Promise 对游戏开发的帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于异步资源载入"><span class="toc-number">7.</span> <span class="toc-text">Promise用于异步资源载入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于组合游戏逻辑"><span class="toc-number">8.</span> <span class="toc-text">Promise用于组合游戏逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-All"><span class="toc-number">8.1.</span> <span class="toc-text">Promise.All</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-Race"><span class="toc-number">8.2.</span> <span class="toc-text">Promise.Race</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-Sequence"><span class="toc-number">8.3.</span> <span class="toc-text">Promise.Sequence</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于时间逻辑"><span class="toc-number">9.</span> <span class="toc-text">Promise用于时间逻辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于条件门控"><span class="toc-number">10.</span> <span class="toc-text">Promise用于条件门控</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#嵌套Promise"><span class="toc-number">11.</span> <span class="toc-text">嵌套Promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise对比Unity协程"><span class="toc-number">12.</span> <span class="toc-text">Promise对比Unity协程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#就是某种形式的行为树？"><span class="toc-number">13.</span> <span class="toc-text">就是某种形式的行为树？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">14.</span> <span class="toc-text">结论</span></a></li></ol>
 		</div>
 		
-		<h1 id="使用Promise进行游戏开发"><a href="#使用Promise进行游戏开发" class="headerlink" title="使用Promise进行游戏开发"></a>使用Promise进行游戏开发</h1><p>本文翻译自<a href="http://www.what-could-possibly-go-wrong.com/promises-for-game-development/" target="_blank" rel="external">Promises for Game Development</a>, by <a href="http://www.what-could-possibly-go-wrong.com/author/ash/" target="_blank" rel="external">Ashley Davis</a> 和 Adam Single</p>
+		<p>本文翻译自<a href="http://www.what-could-possibly-go-wrong.com/promises-for-game-development/" target="_blank" rel="external">Promises for Game Development</a>, by <a href="http://www.what-could-possibly-go-wrong.com/author/ash/" target="_blank" rel="external">Ashley Davis</a> 和 Adam Single</p>
 <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本文中，我将分享使用<a href="http://en.wikipedia.org/wiki/Futures_and_promises" target="_blank" rel="external">Promise</a>进行游戏开发的经验。旨在揭示为什么promise能有提升游戏开发进程。</p>
 <p>本文不面向初学者。读者需要初级至中级以上的C#水平。本文将帮助为游戏规模扩大而深陷泥潭的你们。读者需要已经了解管理异步操作链、复杂网页的相互依赖及基于时间序列游戏逻辑的难点。本文便是你所要寻找的良方用于构建更好的代码结构，他将给你一个全新的选择。</p>
 <p>本文会先介绍一下什么是promises及泛泛说明下它在游戏开发中如何有用。这样抛砖引玉，能够更好的了解promise所应用在游戏开发中的具体情形。这将引领我们探讨如何扩展promise模式去应对更高级的游戏开发问题：组合小单元游戏逻辑、基于时间序列的逻辑及构建条件门逻辑。最后，比较promise和其他你曾考虑或用过的模式。</p>
@@ -105,7 +105,7 @@
 <p>用JS开发网页应用的经历让我们发现了promise。这里说的JS是完全版本JS，而不是Unity版的伪JS。阅读维基百科后发现，promise由<a href="https://en.wikipedia.org/wiki/Functional_programming" target="_blank" rel="external">函数式编程语言</a>移植到JS，函数式语言真是好东西的发源地呀。</p>
 <p>Promise在JS中常被颂赞其解决反模式——<a href="http://callbackhell.com/" target="_blank" rel="external">回调地狱</a>。虽然有很多JS类库用于管理异步代码，但是promise从中杀出，成为标准库的一部分。</p>
 <p>好吧，现在概述下promise如何帮助进行游戏开发。</p>
-<h2 id="使用Promise进行游戏开发-1"><a href="#使用Promise进行游戏开发-1" class="headerlink" title="使用Promise进行游戏开发"></a>使用Promise进行游戏开发</h2><p>游戏如何架构？Promise如何促进游戏开发？</p>
+<h2 id="使用Promise进行游戏开发"><a href="#使用Promise进行游戏开发" class="headerlink" title="使用Promise进行游戏开发"></a>使用Promise进行游戏开发</h2><p>游戏如何架构？Promise如何促进游戏开发？</p>
 <p>你可能认为游戏只是时间序列——依赖一个接一个的活动，依赖前置活动或玩家输入。当玩家满足一定目标后，达成游戏或等级。目标又依赖活动及前置目标……如果能从4维视角看，游戏就像挂毯样，交织着这种复杂的目标及依赖。</p>
 <p>一些游戏开发工具包以优雅易懂的方式帮助连接目标及活动依赖，且游戏演变后同样容易修改。当然，现在有许多可用的模式来架构游戏代码：策略模式、有限状态机、层次状态机、行为树、脚本化、协程、消息事件、实体组件系统等等，每个都是值得深入理解的。</p>
 <p>我想说的是，primise也隶属于其中。它是简明的备选，适用于不同任务情形，你甚至可以直接使用它们。promise的威力在于它能把整个活动序列当做单一的实体。这是promise能被复用的基础，你可以搭建越来越大的组件，其组合多种游戏逻辑及行为。这样的代码易读、易懂、易维护。</p>
@@ -237,11 +237,16 @@
 		<footer class="article-footer clearfix">
 
 
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/翻译/">翻译</a>
+</div>
+
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2016/08/05/Promises for Game Development/" data-title="Sheldon的世界" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2016/08/05/Promises for Game Development/" data-title="使用Promise进行游戏开发 | Sheldon的世界" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -251,10 +256,10 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/08/05/Using promises for Unity async operations/" title="">
+ <a href="/2016/08/05/Using promises for Unity async operations/" title="promise应用于Unity异步操作">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  (no title)</span>
+  promise应用于Unity异步操作</span>
 </a>
 </div>
 
@@ -271,23 +276,32 @@
 
 	
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#使用Promise进行游戏开发"><span class="toc-number">1.</span> <span class="toc-text">使用Promise进行游戏开发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.2.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍promise"><span class="toc-number">1.3.</span> <span class="toc-text">介绍promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Promise进行游戏开发-1"><span class="toc-number">1.4.</span> <span class="toc-text">使用Promise进行游戏开发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise对C-的帮助"><span class="toc-number">1.5.</span> <span class="toc-text">Promise对C#的帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise-对游戏开发的帮助"><span class="toc-number">1.6.</span> <span class="toc-text">Promise 对游戏开发的帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于异步资源载入"><span class="toc-number">1.7.</span> <span class="toc-text">Promise用于异步资源载入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于组合游戏逻辑"><span class="toc-number">1.8.</span> <span class="toc-text">Promise用于组合游戏逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-All"><span class="toc-number">1.8.1.</span> <span class="toc-text">Promise.All</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-Race"><span class="toc-number">1.8.2.</span> <span class="toc-text">Promise.Race</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-Sequence"><span class="toc-number">1.8.3.</span> <span class="toc-text">Promise.Sequence</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于时间逻辑"><span class="toc-number">1.9.</span> <span class="toc-text">Promise用于时间逻辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于条件门控"><span class="toc-number">1.10.</span> <span class="toc-text">Promise用于条件门控</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#嵌套Promise"><span class="toc-number">1.11.</span> <span class="toc-text">嵌套Promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise对比Unity协程"><span class="toc-number">1.12.</span> <span class="toc-text">Promise对比Unity协程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#就是某种形式的行为树？"><span class="toc-number">1.13.</span> <span class="toc-text">就是某种形式的行为树？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">1.14.</span> <span class="toc-text">结论</span></a></li></ol></li></ol>
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">2.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍promise"><span class="toc-number">3.</span> <span class="toc-text">介绍promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Promise进行游戏开发"><span class="toc-number">4.</span> <span class="toc-text">使用Promise进行游戏开发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise对C-的帮助"><span class="toc-number">5.</span> <span class="toc-text">Promise对C#的帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise-对游戏开发的帮助"><span class="toc-number">6.</span> <span class="toc-text">Promise 对游戏开发的帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于异步资源载入"><span class="toc-number">7.</span> <span class="toc-text">Promise用于异步资源载入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于组合游戏逻辑"><span class="toc-number">8.</span> <span class="toc-text">Promise用于组合游戏逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-All"><span class="toc-number">8.1.</span> <span class="toc-text">Promise.All</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-Race"><span class="toc-number">8.2.</span> <span class="toc-text">Promise.Race</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise-Sequence"><span class="toc-number">8.3.</span> <span class="toc-text">Promise.Sequence</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于时间逻辑"><span class="toc-number">9.</span> <span class="toc-text">Promise用于时间逻辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise用于条件门控"><span class="toc-number">10.</span> <span class="toc-text">Promise用于条件门控</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#嵌套Promise"><span class="toc-number">11.</span> <span class="toc-text">嵌套Promise</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promise对比Unity协程"><span class="toc-number">12.</span> <span class="toc-text">Promise对比Unity协程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#就是某种形式的行为树？"><span class="toc-number">13.</span> <span class="toc-text">就是某种形式的行为树？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结论"><span class="toc-number">14.</span> <span class="toc-text">结论</span></a></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/翻译/" title="翻译">翻译<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
 
   
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS</a>
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
 </aside>
