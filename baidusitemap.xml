@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+    
+  <url>
+    <loc>https://xldcode.github.io/2016/08/05/Using%20promises%20for%20Unity%20async%20operations/</loc>
+    <lastmod>2016-08-06T04:13:37.588Z</lastmod>
+    <data>
+        <display>
+        <title>promise应用于Unity异步操作</title>
+        <pubTime>2016-08-05T20:37:06.269Z</pubTime>
+        
+        <tag>Promise</tag>
+         
+        <tag>游戏开发</tag>
+         
+        <tag>Unity3D</tag>
+         
+         
+           
+             
+              <breadCrumb title="翻译" url="https://xldcode.github.io/categories/programming/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://xldcode.github.io/2016/08/05/Promises%20for%20Game%20Development/</loc>
+    <lastmod>2016-08-06T04:13:36.146Z</lastmod>
+    <data>
+        <display>
+        <title>使用Promise进行游戏开发</title>
+        <pubTime>2016-08-05T20:37:06.269Z</pubTime>
+        
+        <tag>Promise</tag>
+         
+        <tag>游戏开发</tag>
+         
+        <tag>Unity3D</tag>
+         
+         
+           
+             
+              <breadCrumb title="翻译" url="https://xldcode.github.io/categories/programming/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://xldcode.github.io/2016/08/05/Fluent%20behavior%20trees%20for%20AI%20and%20game-logic/</loc>
+    <lastmod>2016-08-06T04:13:34.931Z</lastmod>
+    <data>
+        <display>
+        <title>流式行为树用于AI和游戏逻辑</title>
+        <pubTime>2016-08-05T20:37:06.269Z</pubTime>
+        
+        <tag>游戏开发</tag>
+         
+        <tag>行为树</tag>
+         
+         
+           
+             
+              <breadCrumb title="翻译" url="https://xldcode.github.io/categories/programming/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+    
+</urlset>
